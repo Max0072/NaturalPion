@@ -106,8 +106,6 @@ class RunConfig:
     # learning rate requires. Tied together, raising `lr` also raises AdamW's
     # rate on the embedding, the output head, the norm gains and the biases,
     # and AdamW detonates there long before the rotation does anything at all.
-    # The `eta` sweep recorded in docs/history/JOURNAL.md before 2026-08-26 varied both
-    # at once and measured AdamW.
     adamw_lr: float = 0.0
     seed: int = 0
 
@@ -246,7 +244,7 @@ class RunConfig:
     pion_momentum: str = "lie"      # the variant their published 60M numbers use
     pion_retraction: str = "trunc"
     # Bilateral, which is their better published number for this model -- 3.3575
-    # against 3.3654 for alternate -- and the variant NGD-Pion matches, since it
+    # against 3.3654 for alternate -- and the variant Natural Pion matches, since it
     # rotates both sides every step. This default said `True` for a while with
     # nothing defending it, which would have put Pion in a variant the arm it is
     # compared with does not use. The baseline has to be Pion at its best.
@@ -323,13 +321,13 @@ class RunConfig:
     # 512 removes accumulation entirely -- one micro-batch is the whole step --
     # and lets the covariance see all 131k tokens of a step rather than a slice.
     # Measured on an RTX PRO 6000 Blackwell (96 GB) in job 246613, on warm page
-    # cache: pion 0.460 s/step and ngd-pion 0.722 at 512, against 0.869 and
+    # cache: pion 0.460 s/step and the earlier ngd-pion 0.722 at 512, against 0.869 and
     # 0.673 at 256. So 512 is the right default for Pion by a wide margin, and
     # for NGD-Pion the two are close enough that seeing the full step's tokens
     # decides it.
     #
     # It fits only with PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True, which
-    # every GPU sbatch script in scripts/sbatch now sets. Without that flag
+    # every GPU sbatch script in scripts/paper sets. Without that flag
     # ngd-pion OOMs at 512 -- not for lack of room (385 MB of optimizer state
     # against 14.6 GB of headroom) but because the unbatched `_apply` leaves the
     # allocator unable to serve 7-30 MB contiguous blocks. Run outside those

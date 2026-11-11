@@ -1,4 +1,4 @@
-"""§4: the bases, their defining identities, and which path each shape takes."""
+"""The bases, their defining identities, and which path each shape takes."""
 
 import numpy as np
 import pytest

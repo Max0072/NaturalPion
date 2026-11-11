@@ -1,4 +1,4 @@
-"""Vanilla Pion, as the baseline NGD-Pion is measured against.
+"""Vanilla Pion, the baseline Natural Pion is measured against.
 
 A faithful transcription of `pion.py` from the reference implementation
 (github.com/Sphere-AI-Lab/pion), reduced to what the comparison needs: the
@@ -6,12 +6,10 @@ same generators, the same RMS scaling, the same ambient momentum, and the same
 degree-2 truncated exponential -- plus switches to turn each off, which is
 what an ablation would require.
 
-**Only the published configuration is used as a baseline** (ADR 0008). The
+**Only the published configuration is used as a baseline.** The
 switches are kept because the class API and two tests that pin findings need
 them -- the truncated exponential diverging once scaling is off, and Shampoo's
 `power = 0` limit -- not because an ablated Pion is compared against anything.
-The `pion_ablated` optimizer name that used to select them was removed
-(ADR 0011).
 
 Two departures from their code, both forced:
 

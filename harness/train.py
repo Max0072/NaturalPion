@@ -109,9 +109,7 @@ def build_optimizers(model: Transformer, cfg: RunConfig):
             rot.profile = {}
     elif cfg.optimizer == "pion":
         # Published Pion, every setting from `RunConfig` -- the baseline, and the
-        # only Pion arm (ADR 0008, 0011). There used to be a `pion_ablated` name
-        # that switched off momentum and scaling and forced Cayley; it was not
-        # Pion and has been removed.
+        # only Pion arm.
         rot = Pion(
             weights, lr=cfg.lr,
             scaling=cfg.pion_scaling,
@@ -517,8 +515,8 @@ def train(
                 rho_held = (held_before - held_after) / predicted if predicted else float("nan")
                 held_window.append(rho_held)
             # The trust region finally gets to read the number it exists for.
-            # Only a listener with `adapt_damping` acts on it -- `ngd-pion-s`
-            # with `trust_lr` on, or `ngd-pion-damped`.
+            # Only a listener with `adapt_damping` acts on it; no optimizer in
+            # this repository has one.
             #
             # **Steers on `rho_held` when it is being measured, `rho`
             # otherwise.** Same-batch `rho` asks whether the quadratic model
@@ -526,7 +524,7 @@ def train(
             # times too long still fits it, because it is descending that
             # batch's own quadratic, and the step is 96.4% sampling noise, so
             # that batch's quadratic and the expected one are not the same
-            # object (journal, 2026-08-27/29). `rho_held`, measured on an
+            # object. `rho_held`, measured on an
             # independent batch, does not have that blind spot. This is the
             # one change `rho_holdout` was left "diagnostic only" for; it was
             # not made earlier so that turning the holdout on would not,

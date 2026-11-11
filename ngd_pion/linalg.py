@@ -1,6 +1,6 @@
 """Primitives shared by the rest of the package.
 
-Nothing here knows about NGD-Pion. Every function is pure, batched over any
+Nothing here knows about Natural Pion. Every function is pure, batched over any
 leading dimensions, and preserves the dtype and device it is given -- callers
 choose precision, this module never converts.
 """
@@ -146,7 +146,7 @@ def safe_eigh(M: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
 
 
 def floor_eigenvalues(w: torch.Tensor, eps: float) -> torch.Tensor:
-    """Raise eigenvalues below `eps * lam_max` to that floor (docs/history/ALGORITHM.md §4).
+    """Raise eigenvalues below `eps * lam_max` to that floor (the paper's Section 3.2).
 
     The single regularisation primitive of the method. A floor is the identity
     on every eigenvalue above it, so well-determined directions keep their
@@ -257,7 +257,7 @@ def spectral_norm(
 
 
 def cayley(X: torch.Tensor, c: float | torch.Tensor) -> torch.Tensor:
-    """`(I + c/2 X)^-1 (I - c/2 X)`, i.e. `Cayley(-c X)` (docs/history/ALGORITHM.md §7).
+    """`(I + c/2 X)^-1 (I - c/2 X)`, i.e. `Cayley(-c X)` (the paper's Section 3.4).
 
     Exactly orthogonal for skew `X` and any real `c`, and never singular: a
     real skew matrix has purely imaginary eigenvalues, so `I + c/2 X` cannot

@@ -1,4 +1,4 @@
-"""docs/history/ALGORITHM.md §1, §5, §6 -- from a gradient to a preconditioned rotation.
+"""From a gradient to a preconditioned rotation (the paper's Sections 2.1 and 3.2).
 
 Sign convention, stated once and relied on everywhere downstream: `X_in` and
 `X_out` come out of `natural_gradient` **unsigned**, and the descent direction
@@ -18,7 +18,7 @@ __all__ = ["generators", "fisher_apply", "natural_gradient"]
 
 
 def generators(W: torch.Tensor, G: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
-    """`G_in = skew(W^T G)`, `G_out = skew(G W^T)` (§1), with `skew(M) = (M - M^T)/2`.
+    """`G_in = skew(W^T G)`, `G_out = skew(G W^T)` (Section 2.1), with `skew(M) = (M - M^T)/2`.
 
     These **are** the Riemannian gradient with respect to a rotation: for any
     skew `X`, `<G, W X> = <G_in, X>`. For a single sample `G = delta x^T` the
@@ -48,12 +48,12 @@ def generators(W: torch.Tensor, G: torch.Tensor) -> tuple[torch.Tensor, torch.Te
 
 
 def fisher_apply(B: torch.Tensor, C: torch.Tensor, X: torch.Tensor) -> torch.Tensor:
-    """`F(X) = (B X C + C X B)/2` (§2). Self-adjoint and PSD on skew `X`."""
+    """`F(X) = (B X C + C X B)/2` (Proposition 1). Self-adjoint and PSD on skew `X`."""
     return 0.5 * (B @ X @ C + C @ X @ B)
 
 
 def natural_gradient(G_skew: torch.Tensor, basis: Basis) -> torch.Tensor:
-    """Solve `F(X) = G_skew` in the basis of §4.
+    """Solve `F(X) = G_skew` in the basis of Proposition 2.
 
     `X = P Y P^T` turns `(BXC + CXB)/2 = G` into an elementwise division by
     `(lam_i + lam_j)/2`. No damping appears here: `basis.lam` is already

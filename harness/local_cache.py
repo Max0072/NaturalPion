@@ -1,6 +1,6 @@
 """Copy a large, static, heavily-reread file to local disk before memory-mapping it.
 
-Why (2026-09-22, docs/CLUSTER.md "rtx6002 wedges too"): `$DATA_p330` is a
+Why: `$DATA_p330` is a
 `hard`-mounted NFS export from one server, and that server's local-cache
 daemon (`cachefilesd`, the backend for the mount's `fsc` option) has been
 dead since 2026-09-08 -- `SIGSEGV`, core-dumped, a root-owned service this
@@ -31,7 +31,7 @@ __all__ = ["stage_locally"]
 # Below this size, staging is pure overhead (c4_val.bin is 16 MB) -- only pay
 # the one-time copy cost for a file worth reading from scattered thousands of
 # times afterwards. c4_train.bin is ~15 GB; the one-time copy took 32 s from
-# the login node and up to ~45 min from a loaded compute node (docs/CLUSTER.md)
+# the login node and up to ~45 min from a loaded compute node
 # -- worth it either way against a training loop that reads the file thousands
 # of times, but budget minutes, not seconds, when this runs for the first time
 # on a given node.

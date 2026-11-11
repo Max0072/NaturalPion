@@ -11,6 +11,3 @@ Primitives: `covariance` (EMA second moments A, D), `direction` (generators, the
 basis), `factorization` (the generalized eigenbasis), `linalg` (Cayley, spectral norm, exact-fp32 context). `hooks`
 records activations (A) and output gradients (D). `pion_baseline` is published Pion, the only baseline. `reference`
 is a numpy oracle for the tests.
-
-The earlier NGD-Pion optimizers (`ngd-pion-*`, the alpha trust region, `shampoo-pion`) were removed on 2026-11-05;
-they are in git history and described in `docs/history/`.

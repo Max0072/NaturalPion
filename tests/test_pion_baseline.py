@@ -72,7 +72,7 @@ def test_unscaled_truncated_exponential_diverges():
     angle small enough that the truncated exponential's inflation does not
     compound. Switch the scaling off and the same retraction blows up within
     tens of steps. This is the finding that made an "ablated Pion" a different
-    optimizer rather than Pion with a part removed (ADR 0008).
+    optimizer rather than Pion with a part removed.
     """
     W0 = orth(24, seed=6)
     diverged = {}

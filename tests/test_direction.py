@@ -1,4 +1,4 @@
-"""§1, §5, §6: generators, the solve, and the trust-region ratio."""
+"""Generators, the Fisher solve, and the trust-region ratio of the earlier step."""
 
 import numpy as np
 import pytest

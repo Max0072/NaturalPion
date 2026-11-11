@@ -149,7 +149,7 @@ def test_pion_is_wired_as_published():
 
 
 def test_pion_ablated_is_gone():
-    """ADR 0008 and 0011: there is no ablated Pion, and asking for one fails loudly."""
+    """There is no ablated Pion, and asking for one fails loudly."""
     with pytest.raises(ValueError, match="unknown optimizer"):
         build_optimizers(Transformer(SMALL), RunConfig(optimizer="pion_ablated", model=SMALL))
 

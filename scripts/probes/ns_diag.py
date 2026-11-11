@@ -59,7 +59,7 @@ class Probe(NaturalPionFast):
             "max_abs": max(r.abs().max().item() for r in rel),
             "mean_signed": sum(r.mean().item() for r in rel) / len(rel),
         })
-        if self._ratios:                     # the per-matrix sigma path only; Fast batches sigma (angle_check.py covers it)
+        if self._ratios:                     # the per-matrix sigma path only; Fast batches sigma
             REC["sigma_ratio"].append([min(self._ratios), sorted(self._ratios)[len(self._ratios) // 2]])
         return out
 

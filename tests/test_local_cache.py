@@ -1,7 +1,6 @@
 """harness/local_cache.py: staging a large file to local disk before use.
 
-Pins the behaviour the wedge fix (docs/CLUSTER.md, "rtx6002 wedges too",
-2026-09-22) depends on: staging is skipped below the size threshold and when
+Pins the behaviour the wedge fix in harness/local_cache.py depends on: staging is skipped below the size threshold and when
 disabled, copies once and reuses the copy, and never raises -- a training run
 must get a usable path back even if the local cache turns out to be broken.
 """

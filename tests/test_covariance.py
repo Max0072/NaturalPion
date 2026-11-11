@@ -1,4 +1,4 @@
-"""§3: the covariance accumulator, including the precision guard."""
+"""The covariance accumulator, including the precision guard."""
 
 import pytest
 import torch

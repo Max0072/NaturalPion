@@ -364,7 +364,7 @@ def test_tf32_option_runs_and_keeps_the_spectrum(tf32):
 
 
 def test_defaults_are_the_method():
-    """NaturalPionFast without arguments is the method of the preprint (ADR 0017)."""
+    """NaturalPionFast without arguments is the method of the paper."""
     o = NaturalPionFast(_weights(52))
     g = o.param_groups[0]
     assert (o.length, o.tf32, o.fisher_dtype, g["eps"], g["t_fac"], g["stats_window"]) == ("rms", "upstream", "bf16", 1e-3, 25, 6)

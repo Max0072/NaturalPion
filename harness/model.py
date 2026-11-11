@@ -48,7 +48,7 @@ class ModelConfig:
     # compact support, hard edge, no tail. Those differ in shape, not scale, so
     # no rescaling of the usual initialisation reaches one from the other.
     #
-    # It matters more here than it would elsewhere. Pion and NGD-Pion move only
+    # It matters more here than it would elsewhere. Pion and Natural Pion move only
     # the singular *vectors*: the spectrum a weight starts with is the spectrum
     # it ends with. If the trained spectrum is heavy-tailed and the initial one
     # is not, a spectrum-preserving optimizer cannot reach it at all -- and
@@ -62,7 +62,7 @@ class ModelConfig:
     # `"orthogonal"` is a plain semi-orthogonal weight with every singular value
     # equal to `init_gain`. `"xavier"` is Glorot uniform.
     #
-    # **This matters more here than in an ordinary network.** Pion and NGD-Pion
+    # **This matters more here than in an ordinary network.** Pion and Natural Pion
     # rotate, so the singular values of a rotational weight are fixed at
     # initialisation and never move again. The choice is not a starting point,
     # it is a permanent property of the model.
@@ -80,7 +80,7 @@ class ModelConfig:
     # usually not. Dynamical isometry -- orthogonal weights preserving the
     # signal norm through depth -- is the classical prerequisite for training
     # without residuals, and it normally decays as the weights train. Pion and
-    # NGD-Pion **freeze the singular values**, so an orthogonal initialisation
+    # Natural Pion **freeze the singular values**, so an orthogonal initialisation
     # stays orthogonal for the whole run, exactly, as long as the retraction is
     # Cayley. So: does preserving the spectrum substitute for a residual?
     #

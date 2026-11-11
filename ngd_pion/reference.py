@@ -1,4 +1,6 @@
-"""Spec-faithful reference implementation of NGD-Pion.
+"""Naive numpy reference of the earlier NGD-Pion step (the trust-region form that preceded Natural Pion).
+
+The tests check the torch primitives that Natural Pion is built from against it.
 
 Follows `natural_gradient_pion.md` section by section, in dense exact
 arithmetic: every operation is the textbook O(d^3) one, no sketching, no

@@ -1,7 +1,4 @@
-"""docs/history/ALGORITHM.md §3 -- the input covariance `A = E[x x^T]`.
-
-The only statistic the method keeps. `S = E[delta delta^T]` is taken to be the
-identity, so no backward signal is needed and no backward hook has to exist.
+"""The second moments of the Fisher (the paper's Section 2.2): an EMA of `x x^T` (`A`) or of `d d^T` (`D`).
 
 **Precision is not negotiable here.** Perturbing `A` at bf16 level produces a
 step wrong by three to four orders of magnitude: the small eigenvalues of `A`
