@@ -75,6 +75,12 @@ class BackwardRecorder:
 
     `enabled` mirrors `ActivationRecorder`'s: the EMA is defined per optimizer
     step, so under gradient accumulation only one micro-batch may feed it.
+
+    The optimizer scales `D` by `N**2` for the `N` tokens it sees, which undoes the `1/N` of a mean loss. A loss
+    further divided by `k` for accumulation over `k` micro-batches leaves `D` a factor `k**2` small. Pion's RMS rule,
+    the method's default, cancels any common scale of `D`, and so do the floor and the damping, which are relative;
+    so do the angle rules. The other ablation rules see it as a rescaled theta: by `k` for `length="fisher"` and
+    `k**2` for "fixed" and "quad". The paper's runs used `k = 2`.
     """
 
     def __init__(self, modules, optimizer) -> None:

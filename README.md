@@ -3,7 +3,7 @@
 Code, run records and source of the preprint *Natural Pion: Spectrum-Preserving Rotations along the Natural Gradient*
 (Maxim Shikunov, November 2026): `docs/paper/latex/main.pdf`.
 
-Natural Pion trains each weight matrix W by rotating it, W <- exp(X_out) W exp(X_in), like Pion, so W's singular
+Natural Pion trains each weight matrix W by rotating it, W <- R_out W R_in with R = Cay(cX) ~ exp(-cX), like Pion, so W's singular
 values never change. The rotation generators X are preconditioned by a K-FAC Fisher on the generators, inverted in the
 generalized eigenbasis of A (the second moment of a layer's inputs) and D (the second moment of its output gradients).
 On LLaMA-60M trained on C4 it reaches the losses Pion reaches at 1.90-2.12x fewer steps; at full length (73 242 steps)
@@ -77,3 +77,19 @@ of The Cyprus Institute, where the runs were made (PyTorch 2.13, NVIDIA RTX-clas
 
 Runs recorded before 2026-11-11 were made when `NaturalPionFast`'s defaults were older; their manifests carry no
 `defaults_version`, and `RunConfig.from_manifest` restores the defaults they ran with.
+
+## Citation
+
+```bibtex
+@misc{shikunov2026naturalpion,
+  author = {Shikunov, Maxim},
+  title  = {Natural Pion: Spectrum-Preserving Rotations along the Natural Gradient},
+  year   = {2026},
+  note   = {Preprint},
+  url    = {https://github.com/Max0072/NaturalPion}
+}
+```
+
+## License
+
+The code is released under the MIT License (see `LICENSE`).

@@ -394,6 +394,8 @@ def train(
                     recorder.enabled = True
             with _autocast(cfg, device):
                 _, loss = model(x, y)
+            # D comes from this backward at micro == 0 and so carries the 1/accum (see BackwardRecorder); the
+            # true-Fisher pass above does not. Neither matters under the RMS rule.
             (loss / accum).backward()
             loss_sum += loss.detach().item() / accum
 

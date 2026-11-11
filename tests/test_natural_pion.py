@@ -15,7 +15,7 @@ SHAPES = [(12, 8), (8, 8), (8, 8), (8, 12), (12, 8)]  # repeated shapes and size
 # The tests below were written when NaturalPionFast's defaults were the angle rule in fp32 with the floor 1e-4 (before
 # 2026-11-11); they compare it with the angle-rule reference NaturalPion, so they keep those settings unless they set
 # their own. test_defaults_are_the_method checks the new defaults.
-LEGACY = dict(length="spectral", tf32="off", fisher_dtype="fp32", eps=1e-4)
+LEGACY = dict(lr=0.05, length="spectral", tf32="off", fisher_dtype="fp32", eps=1e-4)
 
 
 def _fast(params, *args, **kw):
@@ -367,4 +367,4 @@ def test_defaults_are_the_method():
     """NaturalPionFast without arguments is the method of the paper."""
     o = NaturalPionFast(_weights(52))
     g = o.param_groups[0]
-    assert (o.length, o.tf32, o.fisher_dtype, g["eps"], g["t_fac"], g["stats_window"]) == ("rms", "upstream", "bf16", 1e-3, 25, 6)
+    assert (g["lr"], o.length, o.tf32, o.fisher_dtype, g["eps"], g["t_fac"], g["stats_window"]) == (3e-4, "rms", "upstream", "bf16", 1e-3, 25, 6)

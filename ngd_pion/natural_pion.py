@@ -498,9 +498,12 @@ class NaturalPionFast(NaturalPion):
     `NaturalPion` at 3000 and 15000 steps, and only in Natural Pion's own parts (never those shared with Pion).
     Basis every 25 steps, statistics in the 6 steps before each rebuild, EMA 0.5 on both factors, one `A` per
     distinct input tensor, the Cayley inverse by Newton-Schulz in the correction form (`ns_delta`; the exact
-    solve above `ns_guard`). Everything else as `NaturalPion`."""
+    solve above `ns_guard`). Everything else as `NaturalPion`.
 
-    def __init__(self, params, lr: float = 0.05, *, t_fac: int = 25, stats_window: int | None = 6,
+    `lr` is the peak step scale of Pion's RMS rule (the RMS of `W X_in + X_out W` per step), not an angle: the paper
+    uses 3e-4 to 6e-4 (Section 4.1). The 0.05 of `NaturalPion` is an angle in radians and is far too large here."""
+
+    def __init__(self, params, lr: float = 3e-4, *, t_fac: int = 25, stats_window: int | None = 6,
                  beta_a: float = 0.5, beta_d: float = 0.5, share_inputs: bool = True,
                  retraction: str = "ns_delta", stats_dtype: str = "bf16", batch_sigma: bool = True,
                  share_root: bool = True, direction: str = "natural", length: str = "rms", sides: str = "joint", planes: str = "scaled",

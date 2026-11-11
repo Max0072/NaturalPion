@@ -1,4 +1,4 @@
-"""Every measured number in the paper (docs/paper/latex/main.tex), computed from runs-record/ (or a runnable check).
+r"""Every measured number in the paper (docs/paper/latex/main.tex), computed from runs-record/ (or a runnable check).
 
     python scripts/analysis/paper_numbers.py            # writes docs/paper/numbers.json and docs/paper/numbers.md
     python scripts/analysis/render_tex.py               # writes docs/paper/latex/numbers.tex
@@ -171,7 +171,7 @@ for _steps, _lrs in ((3840, ("5e-4", "1e-3", "2e-3", "4e-3")), (19200, ("1e-3", 
     if all(v is not None for v in _vals.values()):
         _b = min(_vals, key=_vals.get)
         put(f"pion_lr_best_{_steps}", float(_b), f"Table 11 at {_steps}: best of {_lrs}")
-        put(f"pion_lr_gain_{_steps}", _vals["1e-3"] - _vals[_b], f"Table 9 at {_steps}: val(1e-3) - val(best)")
+        put(f"pion_lr_gain_{_steps}", _vals["1e-3"] - _vals[_b], f"Table 11 at {_steps}: val(1e-3) - val(best)")
     else:
         missing(f"pion_lr_best_{_steps}", "Table 11 runs"); missing(f"pion_lr_gain_{_steps}", "Table 11 runs")
 if NUM.get("pion_lr_3840_2e-3") is not None:

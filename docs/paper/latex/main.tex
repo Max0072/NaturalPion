@@ -333,12 +333,12 @@ nothing is rounded near 1. Each squaring costs one product, less than the extra 
 replaces (\texttt{scripts/probes/cayley\_speed.py}).
 
 The result, \(R = \mathrm{Cay}(cX / 2^q)^{2^q}\), is no longer the Cayley transform of \(cX\). Since Cayley is the
-\([1/1]\) Padé approximant of the exponential, it is the scaling-and-squaring method for the matrix exponential
+\([1/1]\) Pad\'e approximant of the exponential, it is the scaling-and-squaring method for the matrix exponential
 \citep{higham2005scaling} with that approximant, an approximation of the geodesic step on \(O(n)\). We call it the
 squared Cayley retraction. On the plane of singular value \(\sigma_j\) it turns by
 \(2^{q+1}\arctan(c\sigma_j / 2^{q+1})\); with \(y = c\sigma_j/2^q \le 0.2\), this matches the exponential's angle
 \(c\sigma_j\) to a relative \(y^2/12 \le 1/300\) at any step length (Proposition 3 applies to each factor, not to \(R\)).
-With exact Cayley factors \(R\) is orthogonal, because a diagonal Padé approximant maps skew matrices to orthogonal ones;
+With exact Cayley factors \(R\) is orthogonal, because a diagonal Pad\'e approximant maps skew matrices to orthogonal ones;
 a truncated Taylor series, Pion's approximation of the same exponential, does not (Proposition 4). In practice each
 factor carries the error of its Newton--Schulz inverse, and the squarings multiply it by up to \(2^q\). In training the
 spectrum moves by \pn{rd_ns_delta_med}{.1e} of its scale over 3 000 steps (Table~\ref{tab:2}). For most of the run the
@@ -405,7 +405,7 @@ every step t:
     X_out <- P_out [ (P_out^T M_out P_out) / K_out ] P_out^T
     c     <- theta_t sqrt(m n) / ||W X_in + X_out W||_F          Pion's RMS rule
     sigma <- max(||X_in||_2, ||X_out||_2)                        warm power iteration (2 steps; 50 after refresh)
-    q     <- smallest q >= 0 with c sigma / 2^q <= 0.2
+    q     <- smallest q >= 0 with c sigma / 2^q <= 0.2           one q per step: the largest c sigma of all matrices
     W     <- SqCay(c X_out) W SqCay(c X_in)          in fp32; SqCay(cX) = Cay(cX / 2^q)^(2^q),
                                                      each Cay by 2 Newton-Schulz steps in Z - I (Sec. 3.4)
 \end{verbatim}
@@ -1120,7 +1120,10 @@ Part of the optimizer's time overlaps the next step's host-side work, so a train
   returns a bf16 matrix has an entrywise error of about \(2^{-8}\) of the largest entries, above the floor; in training
   it even made eigenvalues of \(A\) negative (step 499: thousands over the 56 matrices). Rounding only the inputs
   (Appendix~\ref{sec:C.6}) does neither. Scaling \(D\) by \(N^2\) undoes the \(1/N\) that autograd puts on a mean
-  loss.
+  loss; with the loss also divided over our two micro-batches, \(D\) is a further factor 4 small. The RMS rule, the
+  angle rules, the floor and the damping are unaffected by a common scale of \(D\). Among the other length rules of
+  Table~\ref{tab:8}, it rescales \(\theta\) by 2 for the Fisher norm and by 4 for the fixed and quadratic-model rules,
+  each of which was tuned over its own grid of \(\theta\).
 \item
   \textbf{Rounding bias of the retraction.} Over random rotations (\(1376 \times 1376\), angle 0.05), \(\operatorname{tr}(R^\top R - I)/n\) averages
 \pn{rb_solve_mean}{+.1e} for the exact solve (\pn{rb_solve_z}{.0f} standard errors from zero), \pn{rb_ns_mean}{+.1e} for standard
