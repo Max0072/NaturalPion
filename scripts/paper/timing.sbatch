@@ -40,7 +40,7 @@ for row in "${CONFIGS[@]}"; do
   echo "== $TAG ${ARGS[*]}"
   apptainer exec --env PYTHONUNBUFFERED=1 --env PYTHONPATH="$REPO" --nv --bind "$DATA_p330:$DATA_p330" --pwd "$REPO" "$SIF" \
       python -m harness.run "${ARGS[@]}" --train-steps 3000 --max-steps 600 --no-resume --batch-sequences 512 \
-        --micro-batch 256 --rho-micro 128 --precision bf16 --seed 0 --device cuda --log-every 100 --eval-every 100000 \
+        --micro-batch 256 --precision bf16 --seed 0 --device cuda --log-every 100 --eval-every 100000 \
         --adamw-lr 8e-3 --data-path "$DATA/c4_train.bin" --val-path "$DATA/c4_val.bin" --out-dir "$OUTROOT/$TAG" \
       > "logs/timing-$SLURM_JOB_ID-$TAG.log" 2>&1 || echo "   failed: see logs/timing-$SLURM_JOB_ID-$TAG.log"
 done

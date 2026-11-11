@@ -17,8 +17,6 @@ from harness.config import RunConfig
 from harness.data import TokenCorpus
 from harness.model import ModelConfig, Transformer
 from harness.train import (
-    _measure_loss,
-    _recorders_off,
     build_optimizers,
     lr_at,
     train,
@@ -148,11 +146,6 @@ def test_pion_is_wired_as_published():
     assert group["retraction"] == "trunc"
 
 
-def test_pion_ablated_is_gone():
-    """There is no ablated Pion, and asking for one fails loudly."""
-    with pytest.raises(ValueError, match="unknown optimizer"):
-        build_optimizers(Transformer(SMALL), RunConfig(optimizer="pion_ablated", model=SMALL))
-
 
 @pytest.mark.parametrize("optimizer", ["natural-pion-fast", "natural-pion", "pion", "adamw"])
 def test_run_end_to_end_and_reduce_loss(optimizer, corpus, tmp_path):
@@ -171,68 +164,9 @@ def test_run_end_to_end_and_reduce_loss(optimizer, corpus, tmp_path):
     assert (out / "checkpoint.pt").exists()
 
 
-def test_anchor_follows_the_published_number_not_the_shell_script():
-    """Their 60M script runs a different configuration than their reported figures."""
-    from harness.anchor import TARGETS, anchor_config
-
-    cfg = anchor_config("bilateral")
-    assert cfg.optimizer == "pion"
-    assert cfg.pion_momentum == "lie", "the published figures use Lie+Lie"
-    assert cfg.pion_alternate is False, "3.3575 is the bilateral number"
-    assert cfg.pion_scaling == "rms" and cfg.pion_rms == 0.2
-    assert cfg.pion_retraction == "trunc", "their degree-2 truncated exponential"
-    assert cfg.lr == 1e-3 and cfg.lr_min == 1e-5 and cfg.warmup_steps == 0
-    assert cfg.total_tokens == 73242 * 131072
-    assert TARGETS["bilateral"] == 3.3575
-
-    other = anchor_config("alternate")
-    assert other.pion_alternate is True
-    assert TARGETS["alternate"] == 3.3654
-    assert cfg.hash != other.hash
 
 
-def test_anchor_tolerance_is_tighter_than_the_gap_it_must_resolve():
-    """A tolerance looser than their own bilateral-alternate gap would say nothing."""
-    from harness.anchor import TARGETS, TOLERANCE
 
-    gap = TARGETS["alternate"] - TARGETS["bilateral"]
-    assert 0 < TOLERANCE < 3 * gap
-
-
-def test_anchor_check_reads_a_log(tmp_path):
-    from harness.anchor import check
-
-    log = tmp_path / "log.jsonl"
-    log.write_text("\n".join(json.dumps({"step": i, "train_loss": 3.36}) for i in range(20)))
-    result = check(log, "bilateral")
-    assert result["matched"] and result["status"] == "complete"
-    assert result["measured"] == pytest.approx(3.36)
-
-    log.write_text(json.dumps({"step": 0, "train_loss": 4.0}))
-    assert not check(log, "bilateral")["matched"]
-
-
-def test_anchor_refuses_to_judge_a_truncated_run(tmp_path):
-    """A short run always sits above a converged target; that is not a miss."""
-    from harness.anchor import check
-
-    log = tmp_path / "log.jsonl"
-    log.write_text("\n".join(json.dumps({"step": i, "train_loss": 8.0}) for i in range(6)))
-    result = check(log, "bilateral", expected_steps=73242)
-    assert result["status"] == "incomplete"
-    assert result["matched"] is False
-    assert result["steps_run"] == 6 and result["steps_expected"] == 73242
-
-    on_target = tmp_path / "full.jsonl"
-    on_target.write_text("\n".join(json.dumps({"step": i, "train_loss": 3.357}) for i in range(10)))
-    assert check(on_target, "bilateral", expected_steps=10)["status"] == "complete"
-
-
-def test_anchor_rejects_an_unknown_update_side():
-    from harness.anchor import anchor_config
-
-    with pytest.raises(ValueError, match="update_side"):
-        anchor_config("sideways")
 
 
 def test_cli_flags_parse_to_their_declared_types(monkeypatch):
@@ -260,25 +194,6 @@ def test_cli_flags_parse_to_their_declared_types(monkeypatch):
         assert isinstance(getattr(cfg, name), hints[name]), f"{name} parsed as the wrong type"
     assert cfg.lr == 3e-4 and cfg.micro_batch == 8 and cfg.pion_alternate is False
 
-
-def test_anchor_reads_only_the_most_recent_attempt(tmp_path):
-    """The log is appended, so a re-run of the same config shares the file.
-
-    Without a start marker the check reports the previous attempt's step count,
-    which would let a short re-run be judged against a long one's rows.
-    """
-    from harness.anchor import check, final_loss, last_step
-
-    log = tmp_path / "log.jsonl"
-    rows = [{"event": "start", "steps": 100}]
-    rows += [{"step": i, "train_loss": 9.0} for i in range(50)]
-    rows += [{"event": "start", "steps": 100}]
-    rows += [{"step": i, "train_loss": 3.357} for i in range(3)]
-    log.write_text("\n".join(json.dumps(r) for r in rows))
-
-    assert last_step(log) == 2, "must not see the earlier attempt's steps"
-    assert final_loss(log) == pytest.approx(3.357)
-    assert check(log, "bilateral", expected_steps=100)["steps_run"] == 3
 
 
 def test_training_writes_a_start_marker(corpus, tmp_path):
@@ -505,11 +420,8 @@ def test_a_pre_partition_checkpoint_is_refused_rather_than_misread(tmp_path):
         c.rng_state = np.random.default_rng(0).bit_generator.state
 
 
-def _anchor_optims():
-    from harness.anchor import anchor_config
-    from harness.model import Transformer
-    from harness.train import build_optimizers
-    cfg = anchor_config("bilateral")
+def _pion_optims():
+    cfg = RunConfig(optimizer="pion")
     model = Transformer(cfg.model)
     return cfg, model, build_optimizers(model, cfg)[1]
 
@@ -522,7 +434,7 @@ def test_adam_betas_are_theirs_not_torchs_default():
     model's 58.2M parameters. Like the Pion betas before them, these were not
     configuration fields, so nothing recorded the choice.
     """
-    _, _, adamw = _anchor_optims()
+    _, _, adamw = _pion_optims()
     assert adamw.param_groups[0]["betas"] == (0.9, 0.95)
     assert adamw.param_groups[0]["eps"] == 1e-8
 
@@ -530,13 +442,13 @@ def test_adam_betas_are_theirs_not_torchs_default():
 def test_norm_gains_and_biases_are_not_decayed():
     """Megatron gives `wd_mult = 0.0` to every 1-D parameter and every bias.
 
-    This harness decayed them at 0.1, which over 73242 steps of the anchor's
+    This harness decayed them at 0.1, which over 73242 steps of the
     cosine multiplies a gain by 0.0248 -- a 40x shrink of a parameter that
     starts at 1.0. It matters more under Pion than it would elsewhere, because
     the usual compensation of growing the linear weights is unavailable when
     their spectra are frozen for the whole run.
     """
-    cfg, _, adamw = _anchor_optims()
+    cfg, _, adamw = _pion_optims()
     by_wd = {g["weight_decay"]: g["params"] for g in adamw.param_groups}
     assert set(by_wd) == {0.0, cfg.weight_decay}
     assert all(p.dim() <= 1 for p in by_wd[0.0])
@@ -568,170 +480,22 @@ def test_a_norm_gain_holds_still_while_a_matrix_decays():
 
 
 def test_the_old_behaviour_is_still_reachable():
-    """`decay_norms_and_biases` exists so the four completed anchors remain
-    reproducible; it is not the default because it is not what their runs do."""
-    from dataclasses import replace
-    from harness.anchor import anchor_config
-    from harness.model import Transformer
-    from harness.train import build_optimizers
-    cfg = replace(anchor_config("bilateral"), decay_norms_and_biases=True)
+    """`decay_norms_and_biases` decays every AdamW parameter, as this harness once did; it is not the default because
+    it is not what their runs do."""
+    cfg = replace(RunConfig(optimizer="pion"), decay_norms_and_biases=True)
     _, adamw, _ = build_optimizers(Transformer(cfg.model), cfg)
     assert len(adamw.param_groups) == 1
     assert adamw.param_groups[0]["weight_decay"] == cfg.weight_decay
 
 
-def test_normal_init_is_unchanged_by_the_new_flag():
-    """Every run on disk used it, so the default must be bit-identical."""
-    torch.manual_seed(0)
-    a = Transformer(SMALL)
-    torch.manual_seed(0)
-    b = Transformer(replace(SMALL, init="normal"))
-    for (n, p), (_, q) in zip(a.named_parameters(), b.named_parameters()):
-        assert torch.equal(p, q), n
 
 
-def test_orthogonal_init_gives_a_flat_spectrum_at_the_gain():
-    """The point of it: Pion freezes the spectrum, so this one is permanent."""
-    model = Transformer(replace(SMALL, init="orthogonal", init_gain=1.0))
-    rotational, _ = model.parameter_split()
-    for m in rotational:
-        s = torch.linalg.svdvals(m.weight.detach())
-        assert torch.allclose(s, torch.ones_like(s), atol=1e-5), (s.min(), s.max())
 
 
-def test_orthogonal_gain_scales_the_whole_spectrum():
-    model = Transformer(replace(SMALL, init="orthogonal", init_gain=0.5))
-    m = model.parameter_split()[0][0]
-    s = torch.linalg.svdvals(m.weight.detach())
-    assert torch.allclose(s, 0.5 * torch.ones_like(s), atol=1e-5)
 
 
-def test_xavier_init_has_the_glorot_bound():
-    model = Transformer(replace(SMALL, init="xavier"))
-    m = model.parameter_split()[0][0]
-    w = m.weight.detach()
-    fan_out, fan_in = w.shape
-    bound = math.sqrt(6.0 / (fan_in + fan_out))
-    assert w.abs().max() <= bound * (1 + 1e-6)
-    assert w.abs().max() > 0.8 * bound
 
 
-def test_the_embedding_and_head_keep_the_normal_init():
-    """The spectral condition is derived for matmul layers; an embedding is a
-    lookup table, and both belong to AdamW which can move their spectra anyway."""
-    torch.manual_seed(0)
-    a = Transformer(SMALL)
-    torch.manual_seed(0)
-    b = Transformer(replace(SMALL, init="orthogonal"))
-    assert torch.equal(a.embed.weight, b.embed.weight)
-    assert torch.equal(a.head.weight, b.head.weight)
-
-
-def test_two_ways_to_choose_a_spectrum_are_refused_together():
-    with pytest.raises(ValueError):
-        Transformer(replace(SMALL, init="orthogonal", init_pl_alpha=3.0))
-    with pytest.raises(ValueError):
-        Transformer(replace(SMALL, init="hilbert"))
-
-
-def test_residual_flag_changes_the_block_and_defaults_on():
-    """Off, a block is a plain composition; on, it is the usual pre-norm sum."""
-    x = torch.randn(2, 8, SMALL.hidden)
-    for flag in (True, False):
-        torch.manual_seed(0)
-        m = Transformer(replace(SMALL, residual=flag))
-        blk = m.blocks[0]
-        out = blk(x, m.cos[:8], m.sin[:8])
-        composed = blk.ffn(blk.ffn_norm(blk.attn(blk.attn_norm(x), m.cos[:8], m.sin[:8])))
-        if flag:
-            assert not torch.allclose(out, composed, atol=1e-6)
-        else:
-            assert torch.allclose(out, composed, atol=1e-6)
-
-
-def test_residual_default_is_bit_identical_to_before():
-    torch.manual_seed(0)
-    a = Transformer(SMALL)
-    torch.manual_seed(0)
-    b = Transformer(replace(SMALL, residual=True))
-    x = torch.randint(0, SMALL.vocab_size, (2, 8))
-    with torch.no_grad():
-        assert torch.equal(a(x)[0], b(x)[0])
-
-
-def test_orthogonal_weights_survive_a_cayley_run():
-    """The premise of the residual-free experiment: the spectrum is frozen, so
-    an orthogonal initialisation is orthogonal for the whole run, not only at
-    step zero."""
-    torch.manual_seed(0)
-    m = Transformer(replace(SMALL, init="orthogonal", residual=False))
-    w = m.parameter_split()[0][0].weight
-    before = torch.linalg.svdvals(w.detach().double())
-    p = torch.nn.Parameter(w.detach().clone())
-    opt = NaturalPion([p], lr=0.05, t_fac=3)
-    x = torch.randn(64, p.shape[1])
-    d = torch.randn(64, p.shape[0]) * 0.3
-    for _ in range(6):
-        opt.observe(p, x)
-        opt.observe_backward(p, d)
-        p.grad = torch.randn_like(p) * 0.1
-        opt.step()
-    after = torch.linalg.svdvals(p.detach().double())
-    assert torch.allclose(before, after, rtol=1e-5, atol=1e-7)
-
-
-def test_diagnostic_forward_leaves_the_covariance_alone():
-    """A measurement forward must not feed `A`, and for four days it did.
-
-    `ActivationRecorder` hangs off `register_forward_pre_hook`, and a pre-hook
-    fires under `torch.no_grad()` like any other, so the forward that evaluates
-    `rho` was folding its activations into the covariance as though it were a
-    training batch. `CovarianceAccumulator.observe` blends with a fixed
-    `1 - beta` **per call**, not per sample, so a `rho_micro = 128` chunk of a
-    512-sequence batch carried a full training batch's EMA weight from a
-    quarter of the tokens -- four such calls every five steps at
-    `rho_every = 5`, which is 44% of `A`'s weight taken at post-step weights.
-
-    Nine runs were affected and one conclusion did not survive it: the trust
-    region's 0.20 deficit was measured with the controller arms at 44% and the
-    fixed-rate control at 1%, so the arms differed in two things at once.
-
-    Both halves are asserted, because the guard is only meaningful if the thing
-    it guards against would otherwise happen.
-    """
-    cfg = RunConfig(model=SMALL, optimizer="natural-pion-fast", lr=1e-2, micro_batch=4)
-    model = Transformer(SMALL)
-    rot, _, recorder = build_optimizers(model, cfg)
-    assert recorder is not None, "Natural Pion records activations; this test needs one"
-
-    x = torch.randint(0, SMALL.vocab_size, (4, SMALL.seq_len))
-    y = torch.randint(0, SMALL.vocab_size, (4, SMALL.seq_len))
-    _, loss = model(x, y)
-    loss.backward()
-
-    def covariances():
-        out = {}
-        for group in rot.param_groups:
-            for p in group["params"]:
-                acc = rot.state.get(p, {}).get("cov")
-                if acc is not None and acc.ready:
-                    out[id(p)] = acc.matrix.clone()
-        return out
-
-    before = covariances()
-    assert before, "no covariance was accumulated, so the test cannot see the bug"
-
-    with _recorders_off(recorder):
-        _measure_loss(model, x, y, 0, cfg, "cpu")
-    guarded = covariances()
-    for key, was in before.items():
-        assert torch.equal(was, guarded[key]), "a guarded diagnostic forward moved `A`"
-
-    _measure_loss(model, x, y, 0, cfg, "cpu")
-    unguarded = covariances()
-    assert any(
-        not torch.equal(before[key], unguarded[key]) for key in before
-    ), "an unguarded forward left `A` untouched, so the guard is pinning nothing"
 
 
 def test_rotation_schedules():
@@ -746,12 +510,14 @@ def test_rotation_schedules():
     assert "schedule" not in RunConfig().scientific_fields() and "wsd_decay" in cfg.scientific_fields()
 
 
-def test_angle_multiplier_reaches_the_named_matrices():
-    from harness.config import RunConfig
-    from harness.train import build_optimizers
-    from harness.model import Transformer
-    model = Transformer(SMALL)
-    rot, _, rec = build_optimizers(model, RunConfig(optimizer="natural-pion-fast", model=SMALL, np_angle_mult='{"wv": 2}'))
-    vs = {id(m.weight) for n, m in model.named_modules() if n.endswith(".wv")}
-    assert set(rot.angle_mult) == vs and all(f == 2 for f in rot.angle_mult.values()) and len(vs) == SMALL.layers
-    rec.remove()
+def test_every_recorded_manifest_still_loads():
+    """Fields removed from `RunConfig` must not make a recorded run unreadable: `--from-manifest` has to rebuild
+    the configuration of every run in runs-record/."""
+    root = Path(__file__).resolve().parents[1] / "runs-record"
+    manifests = sorted(root.rglob("manifest.json"))
+    assert manifests, "no run records found"
+    for m in manifests:
+        config = json.loads(m.read_text())["config"]
+        if config["optimizer"] == "muon":       # Muon ran on a copy of this harness with fields of its own
+            continue
+        RunConfig.from_manifest(config)

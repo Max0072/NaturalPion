@@ -34,7 +34,7 @@ def git_commit() -> str:
     ran is not the code the hash names, which is the only thing this marker is
     for. Untracked files are deliberately excluded. They used to count, and the
     consequence was that a notes file created beside the repository stamped two
-    anchor runs `-dirty` while the code they executed was clean; a marker that
+    runs `-dirty` while the code they executed was clean; a marker that
     fires on things which cannot change a result stops meaning anything exactly
     when it needs to.
 
@@ -99,8 +99,7 @@ class RunConfig:
     lr: float = 1e-3
     # AdamW's learning rate. `0` means "follow `lr`", which is what their
     # published configuration does -- one rate for both optimizers, 1e-3 --
-    # so the anchor and every configuration written before this field existed
-    # are unaffected.
+    # so every configuration written before this field existed is unaffected.
     #
     # Setting it is what any statement about the *rotational* optimizer's
     # learning rate requires. Tied together, raising `lr` also raises AdamW's
@@ -130,9 +129,6 @@ class RunConfig:
     wsd_decay: float = 0.2
     # Natural Pion: time each part of the optimizer step (GPU-synchronised) into profile.json. Slows the run.
     np_profile: bool = False
-    # Natural Pion Fast: the angle of some matrices times a factor, by name, e.g. '{"wv": 2, "wo": 2}' (a diagnostic of
-    # which matrices want a larger step). Out of the hash when empty.
-    np_angle_mult: str = ""
     weight_decay: float = 0.1
     grad_clip: float = 1.0
 
@@ -156,25 +152,16 @@ class RunConfig:
     tf32: bool = True
 
     # Autocast for the forward pass and the loss. `bf16` is what their own runs
-    # use -- `--bf16` in opt_llama_60M_pion.sh -- so it is the setting that
-    # makes the anchor a fair test rather than a faster one.
-    #
-    # It defaults to bf16 because everything that actually runs is bf16:
-    # `anchor_config` sets it, and every throughput measurement on record
-    # passed `--precision bf16` explicitly. The default said `fp32` for a while
-    # after precision stopped being a known difference from their setup, and
-    # the mismatch was invisible until jobs 246662/246663 -- a plain
-    # `train.sbatch` invocation with no `--precision` -- died allocating a
-    # 15.67 GiB logit tensor, which is 512x256x32100 in fp32 against 8.4 GiB in
-    # bf16. Nothing had launched a full run through that path before, so no
-    # measurement caught it.
+    # use -- `--bf16` in opt_llama_60M_pion.sh -- and every run here. In fp32
+    # the head's 512x256x32100 logits alone are 15.67 GiB, against 8.4 GiB in
+    # bf16.
     #
     # Weights and the optimizer stay fp32 regardless: autocast changes what the
     # operations compute in, not what the parameters are, which is the same
     # arrangement as Megatron's fp32 master weights. The covariance is fed from
     # activations that are then bf16, and that is measured to be harmless --
     # thousands of independent roundings cancel in the average, perturbing `A`
-    # by 4.5e-05, well under the 1e-4 spectral floor. Storing `A` in bf16 would
+    # by 4.5e-05, well under the 1e-3 spectral floor. Storing `A` in bf16 would
     # not be, and `CovarianceAccumulator` refuses to.
     precision: str = "bf16"          # fp32 | bf16
 
@@ -196,43 +183,6 @@ class RunConfig:
     # `D` is an EMA, so the extra pass need not run every step.
     ngd_fisher_mc_every: int = 0
     ngd_beta1: float = 0.9
-    # How often the reduction ratio is measured, independently of logging. `0`
-    # keeps the old behaviour of measuring it only on logged steps.
-    #
-    # This mattered and nobody noticed: `rho` is what the Levenberg-Marquardt
-    # rule in `damped.py` adapts on, and it was tied to `log_every`. At
-    # `log_every = 100` the rule fired once every hundred steps, and the run
-    # that judged it a dead end was 150 steps long -- so the mechanism adapted
-    # perhaps five times in its entire evaluation. kfac-jax uses an interval of
-    # **5**. One extra forward pass every `rho_every` steps is the whole cost.
-    rho_every: int = 0
-    # Sequences per chunk in the reduction-ratio forward. `0` evaluates it in
-    # one piece, which is what it always did. It runs after the optimizer step,
-    # so the optimizer's persistent state is resident and the head's
-    # `vocab x tokens` logits are 8.4 GB on top -- enough to OOM a 96 GiB card
-    # at a measured 82.6 GB peak, which is what happened to `rho_every` on rtx
-    # while it ran fine on b200. Lowering `rho_every` does not help: one
-    # evaluation is already too large.
-    rho_micro: int = 0
-    # Measure the reduction ratio on a *fresh* batch as well as on the batch
-    # whose gradient produced the step, and log it as `rho_held`.
-    #
-    # `rho` as measured is evaluated on the batch it was fit to, so it asks
-    # whether the quadratic model described *that* batch. A step several times
-    # too long still describes it, because it is descending that batch's own
-    # quadratic -- and the step here is 96.4% sampling noise, so the batch's
-    # quadratic and the expected one are not the same object. That is the
-    # obvious candidate for why a controller targeting `rho ~ 1` settles two to
-    # four times above the swept optimum: the quantity it steers by is blind by
-    # construction to the error that makes the step too long.
-    #
-    # Costs two extra chunked forwards per measurement, on a second reader over
-    # the training corpus offset by its seed. **No longer diagnostic-only**
-    # (2026-09-22): when this is on, `rho_held` is what `adapt_damping` steers
-    # on instead of the same-batch `rho` -- see `harness/train.py` where it is
-    # read. Turning `rho_holdout` on therefore changes the trajectory of any
-    # run with `ngd_trust_lr` also on, not only what gets logged.
-    rho_holdout: bool = False
     ngd_ns_iters: int = 2
     # Natural Pion: Newton-Schulz takes as many iterations as the angle needs for fp32 exactness
     # (natural_pion.ns_iterations); the exact solve only above this angle, where it converges too slowly.
@@ -248,9 +198,6 @@ class RunConfig:
     # rotates both sides every step. This default said `True` for a while with
     # nothing defending it, which would have put Pion in a variant the arm it is
     # compared with does not use. The baseline has to be Pion at its best.
-    #
-    # `anchor_config` sets this from `update_side` and does not read the
-    # default, so the anchors were never affected either way.
     pion_alternate: bool = False
     pion_beta1: float = 0.9
     pion_beta2: float = 0.95
@@ -349,11 +296,13 @@ class RunConfig:
     @classmethod
     def from_manifest(cls, config: dict) -> "RunConfig":
         """The configuration a run's manifest.json records. Fields since removed (the per-head flags of 2026-11-05:
-        Q is always rotated per head now; the unused ngd_*/shampoo_* fields of 2026-11-11) are dropped; any other
+        Q is always rotated per head now; the unused ngd_*/shampoo_* fields, the trust-region diagnostics `rho_*`,
+        `np_angle_mult` and the alternative initialisations, none of which changed a recorded run) are dropped; any other
         unknown field is an error. A manifest without `defaults_version` was written under the old defaults, which
         are restored so the run is reproduced as it ran: no lr_min_ratio, and NaturalPionFast's spectral length rule,
         tf32 off and fp32 F^-1 wherever its np_kwargs did not set them."""
-        removed = {"np_split_q_per_head", "pion_split_q_per_head"} | set(['ngd_alpha_max', 'ngd_angle', 'ngd_angle_max', 'ngd_beta', 'ngd_beta_backward', 'ngd_exact_beta', 'ngd_exact_every', 'ngd_exact_tokens', 'ngd_lam', 'ngd_lam_adapt', 'ngd_momentum', 'ngd_power', 'ngd_retraction', 'ngd_s_power', 'ngd_t_fac', 'ngd_trust', 'ngd_trust_lr', 'ngd_trust_lr_cap', 'ngd_trust_lr_hi', 'ngd_trust_lr_lo', 'ngd_use_s', 'shampoo_beta', 'shampoo_damping', 'shampoo_eps', 'shampoo_plane_every', 'shampoo_power'])
+        removed = {"np_split_q_per_head", "pion_split_q_per_head", "rho_every", "rho_micro", "rho_holdout",
+                   "np_angle_mult"} | set(['ngd_alpha_max', 'ngd_angle', 'ngd_angle_max', 'ngd_beta', 'ngd_beta_backward', 'ngd_exact_beta', 'ngd_exact_every', 'ngd_exact_tokens', 'ngd_lam', 'ngd_lam_adapt', 'ngd_momentum', 'ngd_power', 'ngd_retraction', 'ngd_s_power', 'ngd_t_fac', 'ngd_trust', 'ngd_trust_lr', 'ngd_trust_lr_cap', 'ngd_trust_lr_hi', 'ngd_trust_lr_lo', 'ngd_use_s', 'shampoo_beta', 'shampoo_damping', 'shampoo_eps', 'shampoo_plane_every', 'shampoo_power'])
         d = {k: v for k, v in config.items() if k not in removed}
         if "defaults_version" not in d:
             d["defaults_version"] = 1
@@ -363,7 +312,8 @@ class RunConfig:
                 for k, v in (("length", "spectral"), ("tf32", "off"), ("fisher_dtype", "fp32")):
                     kw.setdefault(k, v)
                 d["np_kwargs"] = json.dumps(kw, separators=(",", ":"))
-        return cls(model=ModelConfig(**d.pop("model")), **d)
+        model = {k: v for k, v in d.pop("model").items() if k not in ("init_pl_alpha", "residual", "init", "init_gain")}
+        return cls(model=ModelConfig(**model), **d)
 
     def scientific_fields(self) -> dict:
         """Everything that can change the result, and nothing that cannot."""
@@ -384,8 +334,6 @@ class RunConfig:
             d.pop("np_retraction", None)
         if d.get("np_stats_dtype") in ("fp32", None):
             d.pop("np_stats_dtype", None)
-        if not d.get("np_angle_mult"):
-            d.pop("np_angle_mult", None)
         if d.get("lr_min_ratio") is None:
             d.pop("lr_min_ratio", None)
         if not d.get("np_kwargs"):

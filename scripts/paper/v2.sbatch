@@ -6,9 +6,9 @@
 #SBATCH --cpus-per-task=8
 #SBATCH -o logs/%x-%A_%a.out
 #SBATCH -e logs/%x-%A_%a.err
-# NOTE (2026-11-11): these rows were run before NaturalPionFast's defaults became the method (git tag
-# pre-defaults-2026-11-11); rows that do not set length/tf32/fisher_dtype/eps relied on the old defaults. To repeat a
-# run exactly, use its manifest (python -m harness.run --from-manifest ...), which restores them, or that tag.
+# NOTE (2026-11-11): these rows were run before NaturalPionFast's defaults became the method; rows that do not set
+# length/tf32/fisher_dtype/eps relied on the old defaults. To repeat a run exactly, use its manifest
+# (python -m harness.run --from-manifest ...), which restores them.
 # Every run of the paper's second version (user, 2026-11-05): the query projection rotated per head (always), Natural
 # Pion Fast in its final form unless a row varies something. One row per run:
 #   TAG | OPTIMIZER | STEPS | LR (the step scale) | SEED | BETA1 | RETRACTION | STATS | NP_KWARGS | EXTRA
@@ -149,19 +149,19 @@ ROWS=(
 "s73242|$F|73242|0.05|0|0.9|||"
 # 111 statistics precision at 15000 steps (4.7)
 "stats-fp32-15k|$F|15000|0.05|0|0.9||fp32||"
-# 112-123 the initial spectrum (Appendix D): power-law exponent alpha, flat, orthogonal; alpha 3 over seeds, 15000, full length
-"init-pl2|$F|3000|0.2|0|0.9||||--init-pl-alpha 2"
-"init-pl2.5|$F|3000|0.2|0|0.9||||--init-pl-alpha 2.5"
-"init-pl3|$F|3000|0.2|0|0.9||||--init-pl-alpha 3"
-"init-pl4|$F|3000|0.2|0|0.9||||--init-pl-alpha 4"
-"init-pl5|$F|3000|0.2|0|0.9||||--init-pl-alpha 5"
-"init-flat|$F|3000|0.2|0|0.9||||--init-pl-alpha inf"
-"init-orth|$F|3000|0.2|0|0.9||||--init orthogonal"
-"init-pl3|$F|3000|0.2|1|0.9||||--init-pl-alpha 3"
-"init-pl3|$F|3000|0.2|2|0.9||||--init-pl-alpha 3"
-"init-pl3|$F|3000|0.2|3|0.9||||--init-pl-alpha 3"
-"init-pl3-15k|$F|15000|0.05|0|0.9||||--init-pl-alpha 3"
-"init-pl3-73242|$F|73242|0.05|0|0.9||||--init-pl-alpha 3"
+# 112-123 alternative initial spectra, an experiment outside the paper (its options were removed from the harness)
+"removed"
+"removed"
+"removed"
+"removed"
+"removed"
+"removed"
+"removed"
+"removed"
+"removed"
+"removed"
+"removed"
+"removed"
 # 124-129 second wave: seeds 1-3 at the best angle of a grid (submit with --dependency=afterany:<grid job>)
 "alg1-mom-seeds|$A|3000|best:alg1-mom|1|0.9||||"
 "alg1-mom-seeds|$A|3000|best:alg1-mom|2|0.9||||"
@@ -194,10 +194,9 @@ ROWS=(
 "rms15k-3e-4|$F|15000|3e-4|0|0.9|||{\"length\":\"rms\"}|"
 "rms15k-6e-4|$F|15000|6e-4|0|0.9|||{\"length\":\"rms\"}|"
 "rms15k-1.2e-3|$F|15000|1.2e-3|0|0.9|||{\"length\":\"rms\"}|"
-# 149-150 which matrices want a larger angle (rms_angles.py: RMS gives v x2.3, o x1.7, q and k ~1): the angle rule
-# with v and o at 2x; control, q and k at 2x
-"vo-x2|$F|3000|0.2|0|0.9||||--np-angle-mult {\"wv\":2,\"wo\":2}"
-"qk-x2|$F|3000|0.2|0|0.9||||--np-angle-mult {\"wq\":2,\"wk\":2}"
+# 149-150 a per-matrix angle diagnostic outside the paper (its option was removed from the harness)
+"removed"
+"removed"
 # ---- the method with Pion's RMS length rule (user, 2026-11-06). Wave 1: what unlocks the rest.
 # 151-154 Algorithm 1 with the RMS rule (Fast with every speed-up off: bases and statistics every step, exact Cayley, fp32)
 "rms-alg1-1.5e-4|$F|3000|1.5e-4|0|0.9|cayley|fp32|{\"t_fac\":1,\"stats_window\":null,\"beta_a\":0.95,\"beta_d\":0.5,\"share_inputs\":false,\"batch_sigma\":false,\"share_root\":false,\"length\":\"rms\"}|"
@@ -593,6 +592,7 @@ ROWS=(
 "k-pmsign-4e-2|pion|3000|4e-2|0|0.9||||--pion-scaling msign --pion-momentum ambient --pion-beta1 0.95 --pion-alternate true --lr-min-ratio 0.01"
 "k-pmsign-8e-2|pion|3000|8e-2|0|0.9||||--pion-scaling msign --pion-momentum ambient --pion-beta1 0.95 --pion-alternate true --lr-min-ratio 0.01"
 )
+[ "${ROWS[$SLURM_ARRAY_TASK_ID]}" = removed ] && { echo "row $SLURM_ARRAY_TASK_ID: removed (outside the paper)"; exit 0; }
 IFS='|' read -r TAG OPT STEPS LR SEED B1 RET STATS KW EXTRA <<< "${ROWS[$SLURM_ARRAY_TASK_ID]}"
 case "$RET" in ""|cayley|ns|ns_delta|trunc) ;; *) echo "row $SLURM_ARRAY_TASK_ID: bad RETRACTION '$RET'"; exit 1 ;; esac
 case "$STATS" in ""|fp32|bf16) ;; *) echo "row $SLURM_ARRAY_TASK_ID: bad STATS '$STATS'"; exit 1 ;; esac
@@ -636,6 +636,6 @@ echo "row $SLURM_ARRAY_TASK_ID: $TAG $OPT steps $STEPS angle $LR seed $SEED beta
 apptainer exec --env PYTHONUNBUFFERED=1 --env PYTHONPATH="$REPO" --env PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True \
     --nv --bind "$DATA_p330:$DATA_p330" --pwd "$REPO" "$SIF" \
     python -m harness.run --optimizer "$OPT" "${OPT_ARGS[@]}" $EXTRA \
-      --lr "$LR" --ngd-beta1 "$B1" --train-steps "$STEPS" --batch-sequences 512 --micro-batch 256 --rho-micro 128 \
+      --lr "$LR" --ngd-beta1 "$B1" --train-steps "$STEPS" --batch-sequences 512 --micro-batch 256 \
       --precision bf16 --seed "$SEED" --device cuda --log-every 23 --eval-every "$EV" $ADAMW \
       --data-path "$DATA/c4_train.bin" --val-path "$DATA/c4_val.bin" --out-dir "$OUT"

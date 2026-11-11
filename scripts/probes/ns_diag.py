@@ -69,7 +69,7 @@ from harness import run  # noqa: E402
 
 sys.argv = ["run", "--optimizer", "natural-pion-fast", "--np-retraction", RET, "--lr", "6e-4", "--np-kwargs", '{"length": "rms", "tf32": "upstream", "fisher_dtype": "bf16"}', "--ngd-eps", "1e-3", "--ngd-beta1", "0.9",
             "--train-steps", "3000", "--max-steps", str(STEPS), "--batch-sequences", "512", "--micro-batch", "256",
-            "--rho-micro", "128", "--precision", "bf16", "--seed", "0", "--device", "cuda", "--log-every", "23",
+            "--precision", "bf16", "--seed", "0", "--device", "cuda", "--log-every", "23",
             "--eval-every", "100000", "--adamw-lr", "8e-3", "--data-path", sys.argv[3] + "/c4_train.bin",
             "--val-path", sys.argv[3] + "/c4_val.bin", "--out-dir", sys.argv[4]]
 try:
