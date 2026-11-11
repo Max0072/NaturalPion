@@ -1,0 +1,1 @@
+{"gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition", "layers": 28, "per_size": {"6144": {"sides": 84, "batch": 12, "refactor_s": 56.474, "cayley_s": 2.53}, "2048": {"sides": 252, "batch": 12, "refactor_s": 7.43, "cayley_s": 1.201}, "1024": {"sides": 56, "batch": 12, "refactor_s": 0.509, "cayley_s": 0.097}}, "refactor_total_s": 64.41, "cayley_total_s": 3.83, "peak_gb": 23.8}

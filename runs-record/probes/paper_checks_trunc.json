@@ -1,0 +1,14 @@
+{
+ "checkpoint": "nptrunc/s3000/natural-pion-fast-lr0.2-s0-1a77be85d1/checkpoint.pt",
+ "checkpoint_step": 2999,
+ "fp32_drift_3000_median": 0.005935601053448147,
+ "fp32_drift_3000_max": 0.014859449738392927,
+ "fp32_drift_3000_signed_mean": 0.002274023295119612,
+ "fp32_drift_3000": 0.005935601053448147,
+ "kfac_vs_exact_layers": [
+  0.028925195603334657,
+  0.06290733780470076,
+  0.03417996969460786
+ ],
+ "kfac_vs_exact": 0.03417996969460786
+}

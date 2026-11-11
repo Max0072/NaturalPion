@@ -1,0 +1,88 @@
+{
+ "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+ "checkpoint": "/onyx/data/p330/runs/npfast2/s3000/natural-pion-fast-lr0.2-s0-7a078ebda7/checkpoint.pt",
+ "R0 current": {
+  "s_per_refresh": 0.5557782129981206,
+  "s_per_step_tfac25": 0.022231128519924825,
+  "dir_err_median": 0.0,
+  "dir_err_max": 0.0
+ },
+ "R1 share eigh(A)": {
+  "s_per_refresh": 0.5550443460015231,
+  "s_per_step_tfac25": 0.022201773840060925,
+  "dir_err_median": 0.0,
+  "dir_err_max": 0.00035900092916563153
+ },
+ "R2 no is_identity": {
+  "s_per_refresh": 0.5537366429998656,
+  "s_per_step_tfac25": 0.022149465719994623,
+  "dir_err_median": 0.0,
+  "dir_err_max": 0.0
+ },
+ "R1+R2": {
+  "s_per_refresh": 0.5531813829984458,
+  "s_per_step_tfac25": 0.02212725531993783,
+  "dir_err_median": 0.0,
+  "dir_err_max": 0.00035900092916563153
+ },
+ "R4 R1+R2, C unfloored": {
+  "s_per_refresh": 0.3725747499993304,
+  "s_per_step_tfac25": 0.014902989999973216,
+  "dir_err_median": 0.1163172647356987,
+  "dir_err_max": 0.7055104374885559
+ },
+ "R6 R1+R2, A^-1/2 by Newton-Schulz": {
+  "s_per_refresh": 0.4637486470019212,
+  "s_per_step_tfac25": 0.018549945880076846,
+  "dir_err_median": 0.03292249143123627,
+  "dir_err_max": 0.30325958132743835
+ },
+ "R4b R1+R2, C shifted by eps*lmax": {
+  "s_per_refresh": 0.38582913299978827,
+  "s_per_step_tfac25": 0.01543316531999153,
+  "dir_err_median": 0.0912739560008049,
+  "dir_err_max": 0.15440945327281952
+ },
+ "R4b+R6 C shifted and NS root (one eigh per side)": {
+  "s_per_refresh": 0.29107871299856924,
+  "s_per_step_tfac25": 0.01164314851994277,
+  "dir_err_median": 0.13080589473247528,
+  "dir_err_max": 0.3018125891685486
+ },
+ "R6 NS root, 20 iterations": {
+  "s_per_refresh": 0.5191987420002988,
+  "s_per_step_tfac25": 0.020767949680011954,
+  "dir_err_median": 0.0328606478869915,
+  "dir_err_max": 0.282572865486145
+ },
+ "R6 NS root, 30 iterations": {
+  "s_per_refresh": 0.5890280989988241,
+  "s_per_step_tfac25": 0.023561123959952964,
+  "dir_err_median": 0.03286236524581909,
+  "dir_err_max": 0.2825726270675659
+ },
+ "R6r NS root in residual form, 12": {
+  "s_per_refresh": 0.5018964019982377,
+  "s_per_step_tfac25": 0.020075856079929507,
+  "dir_err_median": 0.033054281026124954,
+  "dir_err_max": 0.3033421039581299
+ },
+ "R6r NS root in residual form, 20": {
+  "s_per_refresh": 0.5862874449994706,
+  "s_per_step_tfac25": 0.023451497799978824,
+  "dir_err_median": 0.03299861401319504,
+  "dir_err_max": 0.2826835513114929
+ },
+ "R6r NS root in residual form, 30": {
+  "s_per_refresh": 0.6924140110022563,
+  "s_per_step_tfac25": 0.02769656044009025,
+  "dir_err_median": 0.03299861401319504,
+  "dir_err_max": 0.2826835513114929
+ },
+ "R3 R1+R2 on MAGMA": {
+  "s_per_refresh": 0.5514999110018834,
+  "s_per_step_tfac25": 0.02205999644007534,
+  "dir_err_median": 0.0,
+  "dir_err_max": 0.00035900092916563153
+ }
+}

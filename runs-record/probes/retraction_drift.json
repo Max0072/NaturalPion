@@ -1,0 +1,38 @@
+{
+ "cayley": {
+  "checkpoint": "npv2/k-g-ret-cayley/natural-pion-fast-lr0.0006-s0-df112488b9/checkpoint.pt",
+  "setting": "rms",
+  "units": 112,
+  "rel_median": 0.0004263698781554748,
+  "scaled_median": 0.00040108304822664256,
+  "scaled_max": 0.00044029962999352865,
+  "signed_mean": 0.0003901193094615875
+ },
+ "ns_delta": {
+  "checkpoint": "npv2/k-m3k-6e-4/natural-pion-fast-lr0.0006-s0-7f7084c283/checkpoint.pt",
+  "setting": "rms",
+  "units": 112,
+  "rel_median": 5.024815123544357e-06,
+  "scaled_median": 3.694577520053589e-06,
+  "scaled_max": 4.787871910096186e-06,
+  "signed_mean": 2.5935584500524147e-06
+ },
+ "ns": {
+  "checkpoint": "npv2/k-g-ret-ns/natural-pion-fast-lr0.0006-s0-7d841297a4/checkpoint.pt",
+  "setting": "rms",
+  "units": 112,
+  "rel_median": 0.005381758876717768,
+  "scaled_median": 0.005177233829994038,
+  "scaled_max": 0.01859153881489756,
+  "signed_mean": 0.008125375105684141
+ },
+ "trunc": {
+  "checkpoint": "npv2/k-g-ret-trunc/natural-pion-fast-lr0.0006-s0-0a5bc911e3/checkpoint.pt",
+  "setting": "rms",
+  "units": 112,
+  "rel_median": 0.008304172240259478,
+  "scaled_median": 0.00502739530193008,
+  "scaled_max": 0.022380506947607483,
+  "signed_mean": 0.0022470286903986995
+ }
+}

@@ -1,0 +1,14 @@
+{
+ "checkpoint": "npnsdelta_b200/s3000/natural-pion-fast-lr0.2-s0-27a57b0962/checkpoint.pt",
+ "checkpoint_step": 2999,
+ "fp32_drift_3000_median": 0.0002781955977262385,
+ "fp32_drift_3000_max": 0.014202045678329611,
+ "fp32_drift_3000_signed_mean": 2.530773178111598e-06,
+ "fp32_drift_3000": 0.0002781955977262385,
+ "kfac_vs_exact_layers": [
+  0.02573847468146778,
+  0.05840243190226972,
+  0.03289340609014508
+ ],
+ "kfac_vs_exact": 0.03289340609014508
+}

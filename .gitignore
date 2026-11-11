@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+.venv/
+data/
+runs/
+logs/
+*.bin
+*.pt
+*.sif
+
+# LaTeX build logs; the arXiv bundle (scripts/analysis/arxiv_bundle.py)
+docs/paper/latex/*.log
+docs/paper/latex/*.blg
+docs/paper/arxiv/

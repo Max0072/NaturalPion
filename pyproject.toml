@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ngd-pion"
+version = "0.1.0"
+description = "Natural Pion: spectrum-preserving rotations along the natural gradient"
+requires-python = ">=3.10"
+dependencies = ["torch>=2.2", "numpy>=1.24"]
+
+# scipy is a test-only dependency: reference.py is the numpy oracle the torch
+# path is checked against, and nothing that trains imports it.
+[project.optional-dependencies]
+test = ["pytest>=8", "scipy>=1.11"]
+data = ["datasets", "transformers", "sentencepiece"]
+paper = ["scipy>=1.11", "matplotlib>=3.7"]   # scripts/analysis (fits, figures)
+
+[tool.setuptools]
+packages = ["ngd_pion", "harness"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["error::RuntimeWarning"]

@@ -1,0 +1,1 @@
+{"gpu": "NVIDIA B200", "layers": 28, "per_size": {"6144": {"sides": 84, "batch": 12, "refactor_s": 44.493, "cayley_s": 2.984}, "2048": {"sides": 252, "batch": 12, "refactor_s": 13.003, "cayley_s": 1.459}, "1024": {"sides": 56, "batch": 12, "refactor_s": 0.908, "cayley_s": 0.107}}, "refactor_total_s": 58.4, "cayley_total_s": 4.55, "peak_gb": 23.8}

@@ -1,0 +1,8 @@
+{
+ "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+ "async_bit_identical": true,
+ "async_max_abs_diff": 0.0,
+ "eager_s_per_step": 0.11317115663019649,
+ "compiled_s_per_step": 0.11328961648971017,
+ "compiled_max_rel_diff": 0.0001626559824217111
+}

@@ -1,0 +1,6 @@
+{
+ "gpu": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+ "eager_sps": 0.06609800423844718,
+ "default": "failed: InductorError: AssertionError: libcuda.so cannot found!\nPossible files are located at ['/usr/local/cuda/compat/lib/libcuda.so.1'].Please create a symlink of libcuda.so to any of the files.\n\nSet TORCHDYNAMO_VERBOSE=1 for the internal stack trace (please do this especially if you're reporting a bug to PyTorch). For ",
+ "reduce-overhead": "failed: InductorError: AssertionError: libcuda.so cannot found!\nPossible files are located at ['/usr/local/cuda/compat/lib/libcuda.so.1'].Please create a symlink of libcuda.so to any of the files.\n\nSet TORCHDYNAMO_VERBOSE=1 for the internal stack trace (please do this especially if you're reporting a bug to PyTorch). For "
+}

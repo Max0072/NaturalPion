@@ -1,0 +1,20 @@
+{"event": "start", "steps": 600, "time": 1794257689.8208876}
+{"event": "corpus", "tokens": 10007773709, "passes": 0.008}
+{"step": 0, "lr": 0.0006, "train_loss": 10.49241018295288, "wall": 4.2, "tokens_per_sec": 31567, "tokens_per_sec_window": null, "peak_gb": 41.96, "pred_drop": 0.0, "rho": NaN, "angle_p10": 0.06476505918461811, "angle_p50": 0.08851398950660236, "angle_p90": 0.13026321948968342}
+{"step": 100, "lr": 0.0005983839591336405, "train_loss": 5.9657838344573975, "wall": 68.5, "tokens_per_sec": 193389, "tokens_per_sec_window": 203838, "peak_gb": 42.88, "pred_drop": 0.0, "rho": NaN, "angle_p10": 0.1249075965991365, "angle_p50": 0.27575041415418067, "angle_p90": 0.5011275744218061}
+{"step": 200, "lr": 0.0005935535422164726, "train_loss": 4.9944353103637695, "wall": 132.7, "tokens_per_sec": 198545, "tokens_per_sec_window": 204039, "peak_gb": 42.88, "pred_drop": 0.0, "rho": NaN, "angle_p10": 0.06073115907838624, "angle_p50": 0.11499075388660725, "angle_p90": 0.2691005919980542}
+{"step": 300, "lr": 0.0005855616723070703, "train_loss": 4.70864725112915, "wall": 197.1, "tokens_per_sec": 200155, "tokens_per_sec_window": 203470, "peak_gb": 42.88, "pred_drop": 0.0, "rho": NaN, "angle_p10": 0.056908721001298256, "angle_p50": 0.100598220382535, "angle_p90": 0.24866597640227867}
+{"step": 400, "lr": 0.0005744959100045672, "train_loss": 4.445958852767944, "wall": 261.4, "tokens_per_sec": 201091, "tokens_per_sec_window": 203965, "peak_gb": 42.88, "pred_drop": 0.0, "rho": NaN, "angle_p10": 0.0550047807459838, "angle_p50": 0.09448405626040907, "angle_p90": 0.27534268157656}
+{"step": 500, "lr": 0.0005604774941164094, "train_loss": 4.312927007675171, "wall": 325.7, "tokens_per_sec": 201604, "tokens_per_sec_window": 203684, "peak_gb": 42.88, "pred_drop": 0.0, "rho": NaN, "angle_p10": 0.05289818750669844, "angle_p50": 0.09725838714089041, "angle_p90": 0.2651670341595695}
+{"step": 599, "lr": 0.0005438414629941033, "train_loss": 4.251075983047485, "wall": 388.5, "tokens_per_sec": 202411, "tokens_per_sec_window": 206596, "peak_gb": 42.88, "pred_drop": 0.0, "rho": NaN, "angle_p10": 0.062046980123938784, "angle_p50": 0.12130115779128608, "angle_p90": 0.18975051376118413}
+{"step": 599, "val_loss": 4.246580791473389}
+{"event": "start", "steps": 600, "time": 1794305752.2434}
+{"event": "corpus", "tokens": 10007773709, "passes": 0.008}
+{"step": 0, "lr": 0.0006, "train_loss": 10.49241018295288, "wall": 3.3, "tokens_per_sec": 39723, "tokens_per_sec_window": null, "peak_gb": 41.96, "pred_drop": 0.0, "rho": NaN, "angle_p10": NaN, "angle_p50": NaN, "angle_p90": NaN}
+{"step": 100, "lr": 0.0005983839591336405, "train_loss": 5.9657838344573975, "wall": 59.6, "tokens_per_sec": 222210, "tokens_per_sec_window": 232910, "peak_gb": 42.88, "pred_drop": 0.0, "rho": NaN, "angle_p10": NaN, "angle_p50": NaN, "angle_p90": NaN}
+{"step": 200, "lr": 0.0005935535422164726, "train_loss": 4.9944353103637695, "wall": 115.9, "tokens_per_sec": 227273, "tokens_per_sec_window": 232625, "peak_gb": 42.88, "pred_drop": 0.0, "rho": NaN, "angle_p10": NaN, "angle_p50": NaN, "angle_p90": NaN}
+{"step": 300, "lr": 0.0005855616723070703, "train_loss": 4.70864725112915, "wall": 173.1, "tokens_per_sec": 227908, "tokens_per_sec_window": 229197, "peak_gb": 42.88, "pred_drop": 0.0, "rho": NaN, "angle_p10": NaN, "angle_p50": NaN, "angle_p90": NaN}
+{"step": 400, "lr": 0.0005744959100045672, "train_loss": 4.445958852767944, "wall": 229.4, "tokens_per_sec": 229157, "tokens_per_sec_window": 233001, "peak_gb": 42.88, "pred_drop": 0.0, "rho": NaN, "angle_p10": NaN, "angle_p50": NaN, "angle_p90": NaN}
+{"step": 500, "lr": 0.0005604774941164094, "train_loss": 4.312927007675171, "wall": 285.7, "tokens_per_sec": 229837, "tokens_per_sec_window": 232603, "peak_gb": 42.88, "pred_drop": 0.0, "rho": NaN, "angle_p10": NaN, "angle_p50": NaN, "angle_p90": NaN}
+{"step": 599, "lr": 0.0005438414629941033, "train_loss": 4.251075983047485, "wall": 341.5, "tokens_per_sec": 230287, "tokens_per_sec_window": 232592, "peak_gb": 42.88, "pred_drop": 0.0, "rho": NaN, "angle_p10": NaN, "angle_p50": NaN, "angle_p90": NaN}
+{"step": 599, "val_loss": 4.246580791473389}

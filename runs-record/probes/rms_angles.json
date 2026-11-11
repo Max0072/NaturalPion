@@ -1,0 +1,771 @@
+{
+ "checkpoint": "/onyx/data/p330/runs/npv2x/len-rms-6e-4/natural-pion-fast-lr0.0006-s0-a75596949d/checkpoint.pt",
+ "by_type": {
+  "attn.wq": {
+   "median": 0.8974011449619165,
+   "min": 0.6869921099012853,
+   "max": 1.551081703677276,
+   "n": 64
+  },
+  "attn.wk": {
+   "median": 0.9719612242482101,
+   "min": 0.7496271963460255,
+   "max": 1.0494702164915257,
+   "n": 8
+  },
+  "attn.wv": {
+   "median": 2.2747775486538737,
+   "min": 1.0923775292952007,
+   "max": 3.5811467547223113,
+   "n": 8
+  },
+  "attn.wo": {
+   "median": 1.6764054678174218,
+   "min": 1.4192068595295744,
+   "max": 1.9482128469673912,
+   "n": 8
+  },
+  "ffn.gate": {
+   "median": 0.9787229158976218,
+   "min": 0.8369985381927156,
+   "max": 1.1798456469810128,
+   "n": 8
+  },
+  "ffn.up": {
+   "median": 1.0097973961691673,
+   "min": 0.8365130953978039,
+   "max": 1.2937563101397376,
+   "n": 8
+  },
+  "ffn.down": {
+   "median": 1.1302461763862703,
+   "min": 1.052328791877677,
+   "max": 1.3218218897792358,
+   "n": 8
+  }
+ },
+ "by_layer": {
+  "0": {
+   "median": 1.1361115881381068,
+   "min": 0.8365130953978039,
+   "max": 1.6571732990760009,
+   "n": 14
+  },
+  "1": {
+   "median": 1.0259101424655028,
+   "min": 0.7496271963460255,
+   "max": 1.9482128469673912,
+   "n": 14
+  },
+  "2": {
+   "median": 1.0036438784589212,
+   "min": 0.8104439219029425,
+   "max": 1.6956376365588428,
+   "n": 14
+  },
+  "3": {
+   "median": 0.9892782638249873,
+   "min": 0.8258326579531404,
+   "max": 2.581422379400811,
+   "n": 14
+  },
+  "4": {
+   "median": 0.8906641442239689,
+   "min": 0.7292161871003064,
+   "max": 3.5811467547223113,
+   "n": 14
+  },
+  "5": {
+   "median": 0.9096562053705293,
+   "min": 0.7271677890465004,
+   "max": 3.224505967546318,
+   "n": 14
+  },
+  "6": {
+   "median": 0.8907984660248558,
+   "min": 0.7490453759717741,
+   "max": 3.1642646118337407,
+   "n": 14
+  },
+  "7": {
+   "median": 0.8667069566715051,
+   "min": 0.6869921099012853,
+   "max": 1.968132717906936,
+   "n": 14
+  }
+ },
+ "units": [
+  {
+   "name": "blocks.0.attn.wq.weight",
+   "unit": 0,
+   "angle": 176.74346537379606,
+   "rel": 1.2728255951891172
+  },
+  {
+   "name": "blocks.0.attn.wq.weight",
+   "unit": 1,
+   "angle": 141.46655371779937,
+   "rel": 1.018777413096412
+  },
+  {
+   "name": "blocks.0.attn.wq.weight",
+   "unit": 2,
+   "angle": 179.54797922335527,
+   "rel": 1.2930224211494539
+  },
+  {
+   "name": "blocks.0.attn.wq.weight",
+   "unit": 3,
+   "angle": 144.9424120886261,
+   "rel": 1.04380895522604
+  },
+  {
+   "name": "blocks.0.attn.wq.weight",
+   "unit": 4,
+   "angle": 143.86553435815983,
+   "rel": 1.0360537743749245
+  },
+  {
+   "name": "blocks.0.attn.wq.weight",
+   "unit": 5,
+   "angle": 215.38186882946897,
+   "rel": 1.551081703677276
+  },
+  {
+   "name": "blocks.0.attn.wq.weight",
+   "unit": 6,
+   "angle": 174.9213804965195,
+   "rel": 1.2597037733243046
+  },
+  {
+   "name": "blocks.0.attn.wq.weight",
+   "unit": 7,
+   "angle": 148.37376095416258,
+   "rel": 1.068519960257208
+  },
+  {
+   "name": "blocks.0.attn.wk.weight",
+   "unit": 0,
+   "angle": 137.84310830510685,
+   "rel": 0.9926830165975562
+  },
+  {
+   "name": "blocks.0.attn.wv.weight",
+   "unit": 0,
+   "angle": 151.68660243307932,
+   "rel": 1.0923775292952007
+  },
+  {
+   "name": "blocks.0.attn.wo.weight",
+   "unit": 0,
+   "angle": 230.11365634904607,
+   "rel": 1.6571732990760009
+  },
+  {
+   "name": "blocks.0.ffn.gate.weight",
+   "unit": 0,
+   "angle": 163.83234988500456,
+   "rel": 1.1798456469810128
+  },
+  {
+   "name": "blocks.0.ffn.up.weight",
+   "unit": 0,
+   "angle": 116.15748761651932,
+   "rel": 0.8365130953978039
+  },
+  {
+   "name": "blocks.0.ffn.down.weight",
+   "unit": 0,
+   "angle": 183.5470486212293,
+   "rel": 1.3218218897792358
+  },
+  {
+   "name": "blocks.1.attn.wq.weight",
+   "unit": 0,
+   "angle": 143.7452370211345,
+   "rel": 1.0351874479776508
+  },
+  {
+   "name": "blocks.1.attn.wq.weight",
+   "unit": 1,
+   "angle": 138.85882636312533,
+   "rel": 0.9999977534621269
+  },
+  {
+   "name": "blocks.1.attn.wq.weight",
+   "unit": 2,
+   "angle": 153.6500436761097,
+   "rel": 1.106517335049793
+  },
+  {
+   "name": "blocks.1.attn.wq.weight",
+   "unit": 3,
+   "angle": 152.36255324850407,
+   "rel": 1.0972454178880942
+  },
+  {
+   "name": "blocks.1.attn.wq.weight",
+   "unit": 4,
+   "angle": 141.81295202068267,
+   "rel": 1.0212720152312489
+  },
+  {
+   "name": "blocks.1.attn.wq.weight",
+   "unit": 5,
+   "angle": 140.05796324270713,
+   "rel": 1.008633388783857
+  },
+  {
+   "name": "blocks.1.attn.wq.weight",
+   "unit": 6,
+   "angle": 143.10104472297442,
+   "rel": 1.0305482696997568
+  },
+  {
+   "name": "blocks.1.attn.wq.weight",
+   "unit": 7,
+   "angle": 117.39052651868526,
+   "rel": 0.8453928775794053
+  },
+  {
+   "name": "blocks.1.attn.wk.weight",
+   "unit": 0,
+   "angle": 104.09258654242718,
+   "rel": 0.7496271963460255
+  },
+  {
+   "name": "blocks.1.attn.wv.weight",
+   "unit": 0,
+   "angle": 176.6522741912446,
+   "rel": 1.272168878003214
+  },
+  {
+   "name": "blocks.1.attn.wo.weight",
+   "unit": 0,
+   "angle": 270.5271571849593,
+   "rel": 1.9482128469673912
+  },
+  {
+   "name": "blocks.1.ffn.gate.weight",
+   "unit": 0,
+   "angle": 116.2248957847222,
+   "rel": 0.8369985381927156
+  },
+  {
+   "name": "blocks.1.ffn.up.weight",
+   "unit": 0,
+   "angle": 122.78005560728805,
+   "rel": 0.8842058009057743
+  },
+  {
+   "name": "blocks.1.ffn.down.weight",
+   "unit": 0,
+   "angle": 158.32302190510848,
+   "rel": 1.1401699868355433
+  },
+  {
+   "name": "blocks.2.attn.wq.weight",
+   "unit": 0,
+   "angle": 138.8594502677518,
+   "rel": 1.000002246537873
+  },
+  {
+   "name": "blocks.2.attn.wq.weight",
+   "unit": 1,
+   "angle": 160.58859960961328,
+   "rel": 1.156485641188505
+  },
+  {
+   "name": "blocks.2.attn.wq.weight",
+   "unit": 2,
+   "angle": 154.20520209148245,
+   "rel": 1.1105153320279366
+  },
+  {
+   "name": "blocks.2.attn.wq.weight",
+   "unit": 3,
+   "angle": 136.22157916523747,
+   "rel": 0.9810055054193877
+  },
+  {
+   "name": "blocks.2.attn.wq.weight",
+   "unit": 4,
+   "angle": 139.8707980089893,
+   "rel": 1.0072855103799694
+  },
+  {
+   "name": "blocks.2.attn.wq.weight",
+   "unit": 5,
+   "angle": 152.6647413165702,
+   "rel": 1.0994216381335322
+  },
+  {
+   "name": "blocks.2.attn.wq.weight",
+   "unit": 6,
+   "angle": 137.08215614179412,
+   "rel": 0.9872029871767763
+  },
+  {
+   "name": "blocks.2.attn.wq.weight",
+   "unit": 7,
+   "angle": 130.22204722004085,
+   "rel": 0.9377996205350394
+  },
+  {
+   "name": "blocks.2.attn.wk.weight",
+   "unit": 0,
+   "angle": 112.53754464842719,
+   "rel": 0.8104439219029425
+  },
+  {
+   "name": "blocks.2.attn.wv.weight",
+   "unit": 0,
+   "angle": 192.59278747324626,
+   "rel": 1.386965163471949
+  },
+  {
+   "name": "blocks.2.attn.wo.weight",
+   "unit": 0,
+   "angle": 235.4547811077877,
+   "rel": 1.6956376365588428
+  },
+  {
+   "name": "blocks.2.ffn.gate.weight",
+   "unit": 0,
+   "angle": 130.70165469580328,
+   "rel": 0.9412535342030973
+  },
+  {
+   "name": "blocks.2.ffn.up.weight",
+   "unit": 0,
+   "angle": 138.1568245808596,
+   "rel": 0.9949422577217527
+  },
+  {
+   "name": "blocks.2.ffn.down.weight",
+   "unit": 0,
+   "angle": 146.12546926466072,
+   "rel": 1.052328791877677
+  },
+  {
+   "name": "blocks.3.attn.wq.weight",
+   "unit": 0,
+   "angle": 132.87265553476456,
+   "rel": 0.9568880892298579
+  },
+  {
+   "name": "blocks.3.attn.wq.weight",
+   "unit": 1,
+   "angle": 145.57341087005452,
+   "rel": 1.048353119831145
+  },
+  {
+   "name": "blocks.3.attn.wq.weight",
+   "unit": 2,
+   "angle": 138.98595219533698,
+   "rel": 1.0009132555583797
+  },
+  {
+   "name": "blocks.3.attn.wq.weight",
+   "unit": 3,
+   "angle": 114.6744112761214,
+   "rel": 0.8258326579531404
+  },
+  {
+   "name": "blocks.3.attn.wq.weight",
+   "unit": 4,
+   "angle": 127.6794195415937,
+   "rel": 0.9194887789923589
+  },
+  {
+   "name": "blocks.3.attn.wq.weight",
+   "unit": 5,
+   "angle": 115.80499690769071,
+   "rel": 0.8339746185420145
+  },
+  {
+   "name": "blocks.3.attn.wq.weight",
+   "unit": 6,
+   "angle": 115.83281841145869,
+   "rel": 0.8341749762866001
+  },
+  {
+   "name": "blocks.3.attn.wq.weight",
+   "unit": 7,
+   "angle": 142.1173214729771,
+   "rel": 1.0234639448081342
+  },
+  {
+   "name": "blocks.3.attn.wk.weight",
+   "unit": 0,
+   "angle": 132.08828784514355,
+   "rel": 0.951239431898864
+  },
+  {
+   "name": "blocks.3.attn.wv.weight",
+   "unit": 0,
+   "angle": 358.45408723178576,
+   "rel": 2.581422379400811
+  },
+  {
+   "name": "blocks.3.attn.wo.weight",
+   "unit": 0,
+   "angle": 197.06984160563636,
+   "rel": 1.4192068595295744
+  },
+  {
+   "name": "blocks.3.ffn.gate.weight",
+   "unit": 0,
+   "angle": 135.7547023425247,
+   "rel": 0.9776432720915947
+  },
+  {
+   "name": "blocks.3.ffn.up.weight",
+   "unit": 0,
+   "angle": 142.28236802958867,
+   "rel": 1.024652534616582
+  },
+  {
+   "name": "blocks.3.ffn.down.weight",
+   "unit": 0,
+   "angle": 150.69278316123393,
+   "rel": 1.085220497472147
+  },
+  {
+   "name": "blocks.4.attn.wq.weight",
+   "unit": 0,
+   "angle": 136.52016594352372,
+   "rel": 0.9831557908230603
+  },
+  {
+   "name": "blocks.4.attn.wq.weight",
+   "unit": 1,
+   "angle": 101.25833138641818,
+   "rel": 0.7292161871003064
+  },
+  {
+   "name": "blocks.4.attn.wq.weight",
+   "unit": 2,
+   "angle": 102.31288353356021,
+   "rel": 0.7368105893120389
+  },
+  {
+   "name": "blocks.4.attn.wq.weight",
+   "unit": 3,
+   "angle": 111.91281435561461,
+   "rel": 0.8059449000856429
+  },
+  {
+   "name": "blocks.4.attn.wq.weight",
+   "unit": 4,
+   "angle": 124.62159183713854,
+   "rel": 0.8974677025147787
+  },
+  {
+   "name": "blocks.4.attn.wq.weight",
+   "unit": 5,
+   "angle": 110.86145338296792,
+   "rel": 0.7983734792529832
+  },
+  {
+   "name": "blocks.4.attn.wq.weight",
+   "unit": 6,
+   "angle": 122.73211935365711,
+   "rel": 0.8838605859331591
+  },
+  {
+   "name": "blocks.4.attn.wq.weight",
+   "unit": 7,
+   "angle": 107.1455725071564,
+   "rel": 0.7716134048287104
+  },
+  {
+   "name": "blocks.4.attn.wk.weight",
+   "unit": 0,
+   "angle": 120.26255018009445,
+   "rel": 0.8660758783257081
+  },
+  {
+   "name": "blocks.4.attn.wv.weight",
+   "unit": 0,
+   "angle": 497.27495254186937,
+   "rel": 3.5811467547223113
+  },
+  {
+   "name": "blocks.4.attn.wo.weight",
+   "unit": 0,
+   "angle": 261.797108977034,
+   "rel": 1.8853430328965752
+  },
+  {
+   "name": "blocks.4.ffn.gate.weight",
+   "unit": 0,
+   "angle": 161.361967054861,
+   "rel": 1.1620550797910325
+  },
+  {
+   "name": "blocks.4.ffn.up.weight",
+   "unit": 0,
+   "angle": 179.64988641616526,
+   "rel": 1.2937563101397376
+  },
+  {
+   "name": "blocks.4.ffn.down.weight",
+   "unit": 0,
+   "angle": 158.42978274644162,
+   "rel": 1.1409388295824328
+  },
+  {
+   "name": "blocks.5.attn.wq.weight",
+   "unit": 0,
+   "angle": 124.26575329066436,
+   "rel": 0.8949051160635664
+  },
+  {
+   "name": "blocks.5.attn.wq.weight",
+   "unit": 1,
+   "angle": 125.78395400006673,
+   "rel": 0.905838503147919
+  },
+  {
+   "name": "blocks.5.attn.wq.weight",
+   "unit": 2,
+   "angle": 120.9118960041464,
+   "rel": 0.8707521699398536
+  },
+  {
+   "name": "blocks.5.attn.wq.weight",
+   "unit": 3,
+   "angle": 106.79513876793428,
+   "rel": 0.7690897413271693
+  },
+  {
+   "name": "blocks.5.attn.wq.weight",
+   "unit": 4,
+   "angle": 112.04004510562184,
+   "rel": 0.8068611577518702
+  },
+  {
+   "name": "blocks.5.attn.wq.weight",
+   "unit": 5,
+   "angle": 104.451492778336,
+   "rel": 0.7522118748933856
+  },
+  {
+   "name": "blocks.5.attn.wq.weight",
+   "unit": 6,
+   "angle": 100.97389259773965,
+   "rel": 0.7271677890465004
+  },
+  {
+   "name": "blocks.5.attn.wq.weight",
+   "unit": 7,
+   "angle": 126.84419968201993,
+   "rel": 0.9134739075931396
+  },
+  {
+   "name": "blocks.5.attn.wk.weight",
+   "unit": 0,
+   "angle": 145.72852994973005,
+   "rel": 1.0494702164915257
+  },
+  {
+   "name": "blocks.5.attn.wv.weight",
+   "unit": 0,
+   "angle": 447.7521201464712,
+   "rel": 3.224505967546318
+  },
+  {
+   "name": "blocks.5.attn.wo.weight",
+   "unit": 0,
+   "angle": 227.2984940973429,
+   "rel": 1.6368997881940013
+  },
+  {
+   "name": "blocks.5.ffn.gate.weight",
+   "unit": 0,
+   "angle": 149.70588034180008,
+   "rel": 1.0781132747757773
+  },
+  {
+   "name": "blocks.5.ffn.up.weight",
+   "unit": 0,
+   "angle": 161.04437224648515,
+   "rel": 1.1597679072489246
+  },
+  {
+   "name": "blocks.5.ffn.down.weight",
+   "unit": 0,
+   "angle": 155.56699836952492,
+   "rel": 1.1203223659369974
+  },
+  {
+   "name": "blocks.6.attn.wq.weight",
+   "unit": 0,
+   "angle": 114.47019525757662,
+   "rel": 0.8243619875959554
+  },
+  {
+   "name": "blocks.6.attn.wq.weight",
+   "unit": 1,
+   "angle": 104.01179546660427,
+   "rel": 0.7490453759717741
+  },
+  {
+   "name": "blocks.6.attn.wq.weight",
+   "unit": 2,
+   "angle": 105.71714924261019,
+   "rel": 0.7613265538380227
+  },
+  {
+   "name": "blocks.6.attn.wq.weight",
+   "unit": 3,
+   "angle": 118.9221718144035,
+   "rel": 0.8564230864248532
+  },
+  {
+   "name": "blocks.6.attn.wq.weight",
+   "unit": 4,
+   "angle": 124.60310758826087,
+   "rel": 0.8973345874090543
+  },
+  {
+   "name": "blocks.6.attn.wq.weight",
+   "unit": 5,
+   "angle": 119.78043387468196,
+   "rel": 0.8626038972140488
+  },
+  {
+   "name": "blocks.6.attn.wq.weight",
+   "unit": 6,
+   "angle": 109.85992744947009,
+   "rel": 0.7911609475777346
+  },
+  {
+   "name": "blocks.6.attn.wq.weight",
+   "unit": 7,
+   "angle": 122.78790722159106,
+   "rel": 0.8842623446406573
+  },
+  {
+   "name": "blocks.6.attn.wk.weight",
+   "unit": 0,
+   "angle": 144.10952865790787,
+   "rel": 1.037810909718756
+  },
+  {
+   "name": "blocks.6.attn.wv.weight",
+   "unit": 0,
+   "angle": 439.3870574012689,
+   "rel": 3.1642646118337407
+  },
+  {
+   "name": "blocks.6.attn.wo.weight",
+   "unit": 0,
+   "angle": 215.45274642327652,
+   "rel": 1.5515921316884778
+  },
+  {
+   "name": "blocks.6.ffn.gate.weight",
+   "unit": 0,
+   "angle": 136.05453915970975,
+   "rel": 0.9798025597036489
+  },
+  {
+   "name": "blocks.6.ffn.up.weight",
+   "unit": 0,
+   "angle": 149.71453720480486,
+   "rel": 1.0781756175434898
+  },
+  {
+   "name": "blocks.6.ffn.down.weight",
+   "unit": 0,
+   "angle": 169.25743743804995,
+   "rel": 1.2189146461038614
+  },
+  {
+   "name": "blocks.7.attn.wq.weight",
+   "unit": 0,
+   "angle": 111.33537143451456,
+   "rel": 0.8017864202901807
+  },
+  {
+   "name": "blocks.7.attn.wq.weight",
+   "unit": 1,
+   "angle": 113.21940346410847,
+   "rel": 0.8153543572113652
+  },
+  {
+   "name": "blocks.7.attn.wq.weight",
+   "unit": 2,
+   "angle": 102.89487062344213,
+   "rel": 0.7410017941325661
+  },
+  {
+   "name": "blocks.7.attn.wq.weight",
+   "unit": 3,
+   "angle": 121.57295901173964,
+   "rel": 0.8755128433504256
+  },
+  {
+   "name": "blocks.7.attn.wq.weight",
+   "unit": 4,
+   "angle": 119.01325768912108,
+   "rel": 0.8570790452319046
+  },
+  {
+   "name": "blocks.7.attn.wq.weight",
+   "unit": 5,
+   "angle": 95.39513241039755,
+   "rel": 0.6869921099012853
+  },
+  {
+   "name": "blocks.7.attn.wq.weight",
+   "unit": 6,
+   "angle": 119.12740333906304,
+   "rel": 0.8579010699925845
+  },
+  {
+   "name": "blocks.7.attn.wq.weight",
+   "unit": 7,
+   "angle": 107.53019441773338,
+   "rel": 0.7743832759026852
+  },
+  {
+   "name": "blocks.7.attn.wk.weight",
+   "unit": 0,
+   "angle": 144.27211337347754,
+   "rel": 1.0389817704740656
+  },
+  {
+   "name": "blocks.7.attn.wv.weight",
+   "unit": 0,
+   "angle": 273.29321329897925,
+   "rel": 1.968132717906936
+  },
+  {
+   "name": "blocks.7.attn.wo.weight",
+   "unit": 0,
+   "angle": 236.39104843800993,
+   "rel": 1.7023802056225752
+  },
+  {
+   "name": "blocks.7.ffn.gate.weight",
+   "unit": 0,
+   "angle": 125.07877994301873,
+   "rel": 0.900760162135561
+  },
+  {
+   "name": "blocks.7.ffn.up.weight",
+   "unit": 0,
+   "angle": 127.97928530377442,
+   "rel": 0.9216482750530326
+  },
+  {
+   "name": "blocks.7.ffn.down.weight",
+   "unit": 0,
+   "angle": 147.0827747187095,
+   "rel": 1.0592228678863738
+  }
+ ]
+}
