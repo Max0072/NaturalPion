@@ -84,7 +84,7 @@ def run(name, make, steps=100, warm=50, compile_step=False, parts=False):
 def main():
     torch.backends.cuda.matmul.allow_tf32 = True          # as in training; the optimizers guard their own fp32
     out = {"gpu": torch.cuda.get_device_name(0)}
-    # the two forms of Table 7 at the method's scale (NP_LR: the best point of the k-series 3000-step grid)
+    # the two forms of Table 17 at the method's scale (NP_LR: the best point of the k-series 3000-step grid)
     lr = float(os.environ.get("NP_LR", "6e-4"))
     out["np_lr"] = lr
     cases = {

@@ -170,7 +170,7 @@ def main():
     for _ in range(2000):
         yb = np.array([rng.choice(v, len(v)).mean() if len(v) > 1 else v[0] + rng.normal(0, sd) for _, v in npn])
         boots.append(fit(Bn, yb))
-    # the same saving against Pion at the best lr of Table 9 (one seed; scripts/paper/pion_lr_depth.sbatch, depth 1%)
+    # the same saving against Pion at the best lr of Table 11 (one seed; scripts/paper/pion_lr_depth.sbatch, depth 1%)
     out["best_lr"] = {}
     for B, pats in ((19200, [("stepnormfinal/pion19200/*", "1e-3"), ("pion-lrdepth/pion19200-lr2e-3/*", "2e-3"),
                              ("pion-lrdepth/pion19200-lr4e-3/*", "4e-3")]),):

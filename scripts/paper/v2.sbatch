@@ -131,7 +131,7 @@ ROWS=(
 "win-dlast6|$F|3000|0.2|0|0.9|cayley|fp32|{\"t_fac\":25,\"stats_window\":null,\"beta_a\":0.95,\"beta_d\":0.5,\"share_inputs\":false,\"batch_sigma\":false,\"share_root\":false,\"d_window\":6}|"
 "win-alast6|$F|3000|0.2|0|0.9|cayley|fp32|{\"t_fac\":25,\"stats_window\":null,\"beta_a\":0.95,\"beta_d\":0.5,\"share_inputs\":false,\"batch_sigma\":false,\"share_root\":false,\"a_window\":6}|"
 "win-aevery2|$F|3000|0.2|0|0.9|cayley|fp32|{\"t_fac\":25,\"stats_window\":null,\"beta_a\":0.9025,\"beta_d\":0.5,\"share_inputs\":false,\"batch_sigma\":false,\"share_root\":false,\"a_every\":2}|"
-# 97-98 profile of the optimizer step by part (Table 1): Algorithm 1 and its T_fac = 25 form, 400 steps
+# 97-98 profile of the optimizer step by part (Table 13): the exact form and its T_fac = 25 form, 400 steps
 "prof-alg1|$A|3000|0.2|0|0.9||||--max-steps 400 --np-profile true"
 "prof-tf25|$A|3000|0.2|0|0.9|||{\"t_fac\":25}|--max-steps 400 --np-profile true"
 # 99-110 Section 4: 3000 and 15000 steps over seeds 0-3, the budget curve, full length
@@ -532,7 +532,7 @@ ROWS=(
 "k-g15k|$F|15000|best:k-m15k|1|0.9|||{\"length\":\"rms\",\"tf32\":\"upstream\",\"fisher_dtype\":\"bf16\"}|--ngd-eps 1e-3 --lr-min-ratio 0.01"
 "k-g15k|$F|15000|best:k-m15k|2|0.9|||{\"length\":\"rms\",\"tf32\":\"upstream\",\"fisher_dtype\":\"bf16\"}|--ngd-eps 1e-3 --lr-min-ratio 0.01"
 "k-g15k|$F|15000|best:k-m15k|3|0.9|||{\"length\":\"rms\",\"tf32\":\"upstream\",\"fisher_dtype\":\"bf16\"}|--ngd-eps 1e-3 --lr-min-ratio 0.01"
-# 453-480 (2026-11-09): Table 13 on the method's configuration (floor 1e-3, TF32 before the rotation, bf16 F^-1,
+# 453-480 (2026-11-09): Table 8 and Appendix C on the method's configuration (floor 1e-3, TF32 before the rotation, bf16 F^-1,
 # depth 1%); only the length rule changes. The RMS row is the method's own grid k-m3k and seeds k-g3k.
 "k-t13-angle-0.05|$F|3000|0.05|0|0.9|||{\"length\":\"spectral\",\"tf32\":\"upstream\",\"fisher_dtype\":\"bf16\"}|--ngd-eps 1e-3 --lr-min-ratio 0.01"
 "k-t13-angle-0.1|$F|3000|0.1|0|0.9|||{\"length\":\"spectral\",\"tf32\":\"upstream\",\"fisher_dtype\":\"bf16\"}|--ngd-eps 1e-3 --lr-min-ratio 0.01"

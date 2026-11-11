@@ -7,13 +7,13 @@
 #SBATCH -t 04:00:00                                        # per row: pass -t (73242 steps ~10 h)
 #SBATCH -o logs/%x-%A_%a.out
 #SBATCH -e logs/%x-%A_%a.err
-# Table 9 (Pion's lr) at one decay depth: the rows at lr != 1e-3 repeated from their own manifests with only
+# Table 11 (Pion's lr) at one decay depth: the rows at lr != 1e-3 repeated from their own manifests with only
 # lr_min_ratio = 0.01 added (they ran with the absolute lr_min 1e-5: depth 2% at 5e-4, 0.5% at 2e-3, 0.25% at 4e-3;
 # the 1e-3 rows already have 1%). Output under runs/pion-lrdepth/<row>/.
 #   sbatch -x rtx6003,rtx6004 --array=0-4 scripts/paper/pion_lr_depth.sbatch
 REPO="${REPO:-$DATA_p330/Natural-Pion}"; SIF="${SIF:-$DATA_p330/containers/ngd-pion.sif}"; DATA="${DATA:-$DATA_p330/c4}"
-# rows 0-4: Table 9 at lr != 1e-3, from their own manifests (lr as recorded); rows 5-8 (2026-11-10): Pion at lr 2e-3
-# at the budgets of Table 11, from the lr 1e-3 runs' manifests with lr overridden, so that Pion's lr is chosen per
+# rows 0-4: Table 11 at lr != 1e-3, from their own manifests (lr as recorded); rows 5-8 (2026-11-10): Pion at lr 2e-3
+# at the budgets of Table 4, from the lr 1e-3 runs' manifests with lr overridden, so that Pion's lr is chosen per
 # budget from {1e-3, 2e-3} as Natural Pion's scale is
 ROWS=("pion3840-lr5e-4|stepnormlong/pion3840-lr5e-4/*|" "pion3840-lr2e-3|stepnormlong/pion3840-lr2e-3/*|"
       "pion3840-lr4e-3|stepnormlong/pion3840-lr4e-3/*|" "pion19200-lr2e-3|stepnormlong/pion19200-lr2e-3/*|"

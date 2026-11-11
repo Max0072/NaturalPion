@@ -1,9 +1,9 @@
-"""Every measured number in docs/paper/preprint.md, computed from runs-record/ (or a runnable check).
+"""Every measured number in the paper (docs/paper/latex/main.tex), computed from runs-record/ (or a runnable check).
 
     python scripts/analysis/paper_numbers.py            # writes docs/paper/numbers.json and docs/paper/numbers.md
-    python scripts/analysis/render_paper.py             # fills preprint.md -> preprint.filled.md
+    python scripts/analysis/render_tex.py               # writes docs/paper/latex/numbers.tex
 
-The preprint refers to numbers only as {{key}}. Each key below says where its value comes from. A key
+The paper refers to numbers only as \pn{key}{format}. Each key below says where its value comes from. A key
 whose source is not yet in the repository is listed as MISSING with what is needed, and renders as a
 visible gap rather than a number.
 
@@ -170,10 +170,10 @@ for _steps, _lrs in ((3840, ("5e-4", "1e-3", "2e-3", "4e-3")), (19200, ("1e-3", 
     _vals = {lr: NUM.get(f"pion_lr_{_steps}_{lr}") for lr in _lrs}
     if all(v is not None for v in _vals.values()):
         _b = min(_vals, key=_vals.get)
-        put(f"pion_lr_best_{_steps}", float(_b), f"Table 9 at {_steps}: best of {_lrs}")
+        put(f"pion_lr_best_{_steps}", float(_b), f"Table 11 at {_steps}: best of {_lrs}")
         put(f"pion_lr_gain_{_steps}", _vals["1e-3"] - _vals[_b], f"Table 9 at {_steps}: val(1e-3) - val(best)")
     else:
-        missing(f"pion_lr_best_{_steps}", "Table 9 runs"); missing(f"pion_lr_gain_{_steps}", "Table 9 runs")
+        missing(f"pion_lr_best_{_steps}", "Table 11 runs"); missing(f"pion_lr_gain_{_steps}", "Table 11 runs")
 if NUM.get("pion_lr_3840_2e-3") is not None:
     put("pion_lr_3840_better", NUM["pion_lr_3840_1e-3"] - NUM["pion_lr_3840_2e-3"], "Pion 3840: lr 1e-3 - lr 2e-3")
 else:
@@ -183,7 +183,7 @@ p3000 = [val("adamw2d/pion-lr0.001-s0-9e6e6d32f6")] + [val("seedshead/pion-lr0.0
 put("pion3000_s0", p3000[0], "adamw2d/pion-lr0.001-s0-9e6e6d32f6 (Pion, 3000 steps, AdamW 8e-3)")
 put("pion3000_mean", sum(p3000) / 4, "Pion 3000, seeds 0-3 (adamw2d, seedshead)")
 put("pion15k", val("ladder15k/pion-lr0.001-s0-f67fdad3e9"), "ladder15k/pion-lr0.001-s0-f67fdad3e9")
-# Pion at its better lr per budget (1e-3 or 2e-3, seed 0; kseries.pion_best), for Table 10 and the gaps
+# Pion at its better lr per budget (1e-3 or 2e-3, seed 0; kseries.pion_best), for Table 2 and the gaps
 for _B, _k in ((15000, "pion15k_best"), (73242, "pion_full_best")):
     _pb = kseries.pion_best(R, _B)
     if _pb is None:
@@ -457,10 +457,10 @@ if f.exists() and d.get("complete"):
         put(f"budget_{B}_pow", t["ratio_powerlaw"], f"{f.name}: B_Pion / B_NP(L), power law")
         put(f"budget_{B}_int", t["ratio_interp"], f"{f.name}: same, interpolation in log B")
     for B, t in d.get("best_lr", {}).items():
-        put(f"budget_best_{B}_pow", t["ratio_powerlaw"], f"{f.name}: saving against Pion at its best Table 9 lr ({t['lr']:g})")
+        put(f"budget_best_{B}_pow", t["ratio_powerlaw"], f"{f.name}: saving against Pion at its best Table 11 lr ({t['lr']:g})")
         put(f"budget_best_{B}_int", t["ratio_interp"], f"{f.name}: same, interpolation")
     allr = [t["ratio_powerlaw"] for t in inside.values()]
-    put("budget_lo", min(allr), f"{f.name}: smallest saving of the power-law fit over the targets of Table 11")
+    put("budget_lo", min(allr), f"{f.name}: smallest saving of the power-law fit over the targets of Table 4")
     put("budget_hi", max(allr), f"{f.name}: largest")
     put("budget_resid", max(d["residual_max_pion"], d["residual_max_np"]), f"{f.name}: worst fit residual")
     put("budget_n_pion", len(d["pion"]["B"]), f"{f.name}: Pion budgets")
@@ -678,7 +678,7 @@ derive("gain_fisher_nomom", lambda a, b: a - b, ("dir_raw_nomom", "dir_fisher_no
 derive("gain_fisher_mom", lambda a, b: a - b, ("dir_raw_mom", "dir_fisher_mom"), "dir_raw_mom - dir_fisher_mom")
 
 # 5.4: length rules, Fast with momentum; angle spread = median over logged steps >= 1000 of p90/p10 of the realised angle
-# Table 13 on the method's configuration (v2.sbatch rows k-t13-*); the RMS rule is the method's own grid
+# Table 8 and Appendix C on the method's configuration (v2.sbatch rows k-t13-*); the RMS rule is the method's own grid
 GRIDS = {"before": ("1e-6", "3e-6", "1e-5", "3e-5", "1e-4"), "fisher": ("3e-4", "6e-4", "1.2e-3", "2.4e-3", "4.8e-3"),
          "quad": ("2.5e-4", "5e-4", "1e-3", "2e-3", "4e-3"), "fixed": ("6.25e-5", "1.25e-4", "2.5e-4", "5e-4", "1e-3")}
 
@@ -764,7 +764,7 @@ else:
     missing("gap_closed_frac", "pion_full_best, v2_full, muon_full")
 # AdamW's lr at full length (scripts/paper/adamw_long.sbatch: the full-length runs repeated with only adamw_lr changed;
 # Pion at its published lr 1e-3, Natural Pion at its full-length scale); 8e-3 is the paper's own pair
-# Pion at its better rotation lr (1e-3 / 2e-3) at every AdamW lr, as in Table 10
+# Pion at its better rotation lr (1e-3 / 2e-3) at every AdamW lr, as in Table 3
 _aw = {("pion", "8e-3"): NUM.get("pion_full_best"), ("np", "8e-3"): NUM.get("v2_full")}
 def _awv(name, a):
     h = [d for d in runs(f"adamwlong/{name}-adamw{a}/*") if info(d)["done"]]
@@ -796,7 +796,7 @@ if all(v is not None for v in _aw.values()):
 else:
     for _k in ("aw_pion_best_lr", "aw_pion_gain", "aw_np_best_lr", "aw_np_gain", "aw_gap_min", "aw_gap_max",
                "aw_pion_best_val", "aw_gap_best", "aw_gap_closed_frac_best"):
-        missing(_k, "every Table 10b run")
+        missing(_k, "every Table 3 run")
 for _a in ("1e-3", "4e-3", "8e-3"):
     if _aw[("pion", _a)] is not None and _aw[("np", _a)] is not None:
         put(f"aw_gap_{_a}", _aw[("pion", _a)] - _aw[("np", _a)], f"Pion - Natural Pion at AdamW {_a}, full length")

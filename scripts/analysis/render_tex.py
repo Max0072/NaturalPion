@@ -3,8 +3,7 @@ docs/paper/numbers.json.
 
     python scripts/analysis/paper_numbers.py && python scripts/analysis/render_tex.py && (cd docs/paper/latex && tectonic main.tex)
 
-The LaTeX twin of render_paper.py, which fills the markdown draft: same keys, same Python format specs, written as
-LaTeX (a `%` in a format is written `\\%` in the source). A key without a value is not defined, and \\pn prints it as
+Keys and Python format specs as in numbers.json, written as LaTeX (a `%` in a format is written `\\%` in the source). A key without a value is not defined, and \\pn prints it as
 **[key?]**, so a gap is visible in the PDF and cannot pass for a number.
 """
 import json

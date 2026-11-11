@@ -1,6 +1,6 @@
-"""Figures for docs/paper/preprint.md, from runs-record/: val against steps and against wall-clock time, full length.
+"""Figures for the paper (docs/paper/latex/main.tex), from runs-record/: val against steps and against wall-clock time, full length.
 
-    python scripts/analysis/figures.py [--muon path/to/muon/log.jsonl] [--out docs/paper/figures]
+    python scripts/analysis/figures.py [--muon path/to/muon/log.jsonl] [--out docs/paper/figures/preprint]
 
 Colours: the first categorical slots of the dataviz reference palette, in fixed order; every line is also
 direct-labelled and has its own dash, so identity never rests on colour alone.
@@ -188,7 +188,7 @@ def angle_figure(path: Path, pion_json: str = "runs-record/probes/pion_angles.js
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--muon", default=None, help="Muon's log.jsonl (Natural-Muon run), optional")
-    ap.add_argument("--out", default="docs/paper/figures")
+    ap.add_argument("--out", default="docs/paper/figures/preprint")
     ap.add_argument("--only", choices=("budget", "angles"), action="append",
                     help="write only these figures (default: all); val_vs_steps needs the Muon log")
     args = ap.parse_args()

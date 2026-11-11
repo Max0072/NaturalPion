@@ -13,7 +13,7 @@
 #   sbatch -x rtx6003,rtx6004 --array=<rows> scripts/paper/adamw_long.sbatch      (ADAMW: the lr, default 4e-3)
 REPO="${REPO:-$DATA_p330/Natural-Pion}"; SIF="${SIF:-$DATA_p330/containers/ngd-pion.sif}"; DATA="${DATA:-$DATA_p330/c4}"
 ADAMW="${ADAMW:-4e-3}"
-# row 2 (2026-11-10): Pion at its other rotation lr, 2e-3 (and depth 1%), so that Table 10b can take Pion's better lr
+# row 2 (2026-11-10): Pion at its other rotation lr, 2e-3 (and depth 1%), so that Table 3 can take Pion's better lr
 # at every AdamW lr
 ROWS=(
   "pion|$(ls $REPO/runs-record/stepnormlong/pion73242-lr1e-3/*/manifest.json | head -1)|"

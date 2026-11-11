@@ -42,11 +42,11 @@ of the paper's runs, including the query projection rotated per attention head.
 | `harness/` | the training harness: LLaMA-60M, the C4 token corpus, configuration (`config.py`), training loop |
 | `tests/` | `pytest tests` |
 | `runs-record/` | the manifest (full configuration) and log of every run the paper reads, and the probe outputs |
-| `scripts/analysis/` | `paper_numbers.py` computes every number of the paper from `runs-record/` into `docs/paper/numbers.json`; `render_tex.py` writes them into `docs/paper/latex/numbers.tex`; `arxiv_bundle.py` packs the arXiv source; `budget_fit.py`, `figures.py`, `flops.py`, `check_fisher.py`; `render_paper.py` fills the markdown draft |
+| `scripts/analysis/` | `paper_numbers.py` computes every number of the paper from `runs-record/` into `docs/paper/numbers.json`; `render_tex.py` writes them into `docs/paper/latex/numbers.tex`; `arxiv_bundle.py` packs the arXiv source; `budget_fit.py`, `figures.py`, `flops.py`, `check_fisher.py` |
 | `scripts/probes/` | the measurements the paper cites (retraction drift, Newton-Schulz rounding, step-time benchmark, ...) |
 | `scripts/paper/` | the job scripts of the runs (SLURM, see `scripts/paper/README.md`) |
 | `scripts/prepare_data.py` | tokenises C4 into the binary corpus the harness reads |
-| `docs/paper/` | `latex/` (the paper: `main.tex`, every number a `\pn{key}{format}` filled from `numbers.json`; `main.pdf`), `numbers.json`, `numbers.md` (every number with its source), figures; `preprint.md` is the markdown draft the LaTeX was converted from |
+| `docs/paper/` | `latex/` (the paper: `main.tex`, every number a `\pn{key}{format}` filled from `numbers.json`; `main.pdf`), `numbers.json`, `numbers.md` (every number with its source), figures |
 
 ## Reproduce
 
