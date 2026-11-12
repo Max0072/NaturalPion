@@ -368,3 +368,28 @@ def test_defaults_are_the_method():
     o = NaturalPionFast(_weights(52))
     g = o.param_groups[0]
     assert (g["lr"], o.length, o.tf32, o.fisher_dtype, g["eps"], g["t_fac"], g["stats_window"]) == (3e-4, "rms", "upstream", "bf16", 1e-3, 25, 6)
+
+
+def test_d_undoes_the_loss_divisor():
+    """A loss divided over k micro-batches gives the same D once the optimizer knows k: D is the per-token second
+    moment of the output gradient, however the loss was split."""
+    g = torch.Generator().manual_seed(3)
+    p = torch.nn.Parameter(torch.randn(12, 8, generator=g))
+    delta = torch.randn(64, 12, generator=g) / 64.0           # the 1/N of a mean loss
+    whole = NaturalPionFast([p])
+    split = NaturalPionFast([p], loss_divisor=2)
+    whole.observe_backward(p, delta)
+    split.observe_backward(p, delta / 2)                       # the same loss, divided over two micro-batches
+    torch.testing.assert_close(split.state[p]["cov_backward"].matrix, whole.state[p]["cov_backward"].matrix,
+                               rtol=0, atol=0)
+
+
+def test_method_ignores_a_common_scale_of_d():
+    """Under Pion's RMS rule a common factor in D cancels, bit for bit for a power of two: the paper's runs, whose D
+    was 4 times small (defaults_version < 3), are the steps of the corrected code."""
+    a, b = _weights(0), _weights(0)
+    true_scale = NaturalPionFast(a, lr=3e-3, t_fac=5, stats_window=2)
+    small = NaturalPionFast(b, lr=3e-3, t_fac=5, stats_window=2, loss_divisor=0.5)   # D four times smaller
+    for wa, wb in zip(_drive(true_scale, a, 30, 1, lambda t: 3e-3), _drive(small, b, 30, 1, lambda t: 3e-3)):
+        for x, y in zip(wa, wb):
+            torch.testing.assert_close(x, y, rtol=0, atol=0)

@@ -119,8 +119,8 @@ class RunConfig:
     # 1e-5 at lr 1e-3 is 0.01. An absolute floor means a different decay depth for every peak. Out of the hash when unset.
     lr_min_ratio: float | None = 0.01
     # 2: NaturalPionFast's defaults are the method and lr_min_ratio defaults to 0.01 (2026-11-11); manifests without
-    # this field are version 1 (see from_manifest)
-    defaults_version: int = 2
+    # this field are version 1 (see from_manifest). 3: D undoes the loss's division over micro-batches (2026-11-11)
+    defaults_version: int = 3
     warmup_steps: int = 0
     # Shape of the rotation optimizer's schedule (AdamW always keeps the cosine): cosine | constant | linear |
     # warmcos (linear up over the first 20%, then cosine) | wsd (flat, then linear to lr_min over the last

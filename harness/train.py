@@ -92,7 +92,10 @@ def build_optimizers(model: Transformer, cfg: RunConfig):
         # The method (natural-pion-fast) or the angle-rule reference (natural-pion). Only the scale, the momentum,
         # the floor and the switches below come from the configuration; cadence, statistics window and factor EMAs are the class's own, so the legacy
         # `ngd_*` defaults cannot leak in. `--lr` is the peak of the step scale (the RMS rule's target).
+        # the loss is divided over the micro-batches; D undoes that from defaults_version 3
+        loss_divisor = max(1, cfg.batch_sequences // cfg.micro_batch) if cfg.defaults_version >= 3 else 1
         rot = NATURAL_PION[cfg.optimizer](weights, lr=cfg.lr, beta1=cfg.ngd_beta1, row_blocks=query_blocks(model, cfg),
+                                          loss_divisor=loss_divisor,
                                           eps=cfg.ngd_eps, damping=cfg.np_damping,
                                           ns_iters=cfg.ngd_ns_iters, ns_guard=cfg.ngd_ns_guard,
                                           **{k: v for k, v in (("retraction", cfg.np_retraction),
@@ -383,7 +386,8 @@ def train(
                         piece = flat[i : i + 8192].float().softmax(-1)
                         drawn[i : i + 8192] = torch.multinomial(piece, 1).squeeze(-1)
                         del piece
-                mc = F.cross_entropy(flat, drawn)
+                # divided like the training loss, so both D have the same scale
+                mc = F.cross_entropy(flat, drawn) / rot.loss_divisor
                 mc.backward()
                 model.zero_grad(set_to_none=True)
                 # the graph is gone with the backward; drop the activations too,
@@ -394,8 +398,6 @@ def train(
                     recorder.enabled = True
             with _autocast(cfg, device):
                 _, loss = model(x, y)
-            # D comes from this backward at micro == 0 and so carries the 1/accum (see BackwardRecorder); the
-            # true-Fisher pass above does not. Neither matters under the RMS rule.
             (loss / accum).backward()
             loss_sum += loss.detach().item() / accum
 

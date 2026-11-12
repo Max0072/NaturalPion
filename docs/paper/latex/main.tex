@@ -92,7 +92,7 @@ of \pn{angle_spread_fixed}{.1e} across the matrices. Third, the resulting rotati
 spectrum.
 
 \textbf{Result.} On LLaMA-60M trained on 9.6B tokens of C4, Pion's full budget, Natural Pion reaches Pion's losses in
-\pn{budget_lo}{.2f}--\pn{budget_hi}{.2f}x fewer steps (Figure~\ref{fig:budget}). At full length it lowers the
+\pn{budget_lo}{.1f}--\pn{budget_hi}{.1f}x fewer steps (Figure~\ref{fig:budget}). At full length it lowers the
 validation loss from \pn{pion_full_best}{.4f} to \pn{v2_full}{.4f} (Figure~\ref{fig:val}), at
 \pn{flops_60M_ratio}{.2f}x Pion's floating-point operations per step. Muon, which does not preserve the spectrum, is
 still ahead, but Natural Pion closes about two thirds of Pion's gap to it (Section~\ref{sec:main}).
@@ -414,8 +414,8 @@ every step t:
 As in Pion, embeddings, the output head and normalization gains use AdamW. The rotated matrices get no weight
 decay: a rotation cannot change their norm.
 
-Under the RMS rule, a constant factor in \(A\) or \(D\) (such as autograd's \(1/N\)) cancels in \(cX\); the Fisher-norm and
-quadratic-model rules and the damping of Section~\ref{sec:ablations} need \(D\) at its true scale (Appendix~\ref{sec:impl}).
+Under the RMS rule, a constant factor in \(A\) or \(D\) (such as autograd's \(1/N\)) cancels in \(cX\); some length rules
+of Section~\ref{sec:ablations} read the scale of \(D\) (Appendix~\ref{sec:impl}).
 
 \section{Experiments}\label{sec:experiments}
 
@@ -1119,11 +1119,12 @@ Part of the optimizer's time overlaps the next step's host-side work, so a train
   feeds \(D\), from one micro-batch per step. Both accumulate in fp32 with autocast disabled. A bf16 product that
   returns a bf16 matrix has an entrywise error of about \(2^{-8}\) of the largest entries, above the floor; in training
   it even made eigenvalues of \(A\) negative (step 499: thousands over the 56 matrices). Rounding only the inputs
-  (Appendix~\ref{sec:C.6}) does neither. Scaling \(D\) by \(N^2\) undoes the \(1/N\) that autograd puts on a mean
-  loss; with the loss also divided over our two micro-batches, \(D\) is a further factor 4 small. The RMS rule, the
-  angle rules, the floor and the damping are unaffected by a common scale of \(D\). Among the other length rules of
-  Table~\ref{tab:8}, it rescales \(\theta\) by 2 for the Fisher norm and by 4 for the fixed and quadratic-model rules,
-  each of which was tuned over its own grid of \(\theta\).
+  (Appendix~\ref{sec:C.6}) does neither. Scaling \(D\) by \((Nk)^2\), for \(N\) tokens and a loss divided over \(k\)
+  micro-batches, undoes both factors. The runs of this paper predate the factor \(k\) (\(k = 2\)), so their \(D\)
+  is 4 times small. The method takes bit-identical steps either way: under the RMS rule a power of two cancels exactly
+  (\texttt{tests/test\_natural\_pion.py}), as it does for the floor and the damping, which are relative, and for the
+  angle rule \(c = \theta/\sigma(X)\). For the other length rules of Table~\ref{tab:8} it amounts to a \(\theta\) larger by 2
+  (Fisher norm) or 4 (fixed, quadratic-model, angle before \(F^{-1}\)), within each row's own grid of \(\theta\).
 \item
   \textbf{Rounding bias of the retraction.} Over random rotations (\(1376 \times 1376\), angle 0.05), \(\operatorname{tr}(R^\top R - I)/n\) averages
 \pn{rb_solve_mean}{+.1e} for the exact solve (\pn{rb_solve_z}{.0f} standard errors from zero), \pn{rb_ns_mean}{+.1e} for standard

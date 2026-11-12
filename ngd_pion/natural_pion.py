@@ -100,6 +100,7 @@ class NaturalPion(torch.optim.Optimizer):
             diagonal block of `D`). Pion rotates the query projection per attention head this way.
         share_inputs: weights fed the very same input tensor (q, k, v; gate, up) share one accumulator
             for `A` instead of computing the identical gram once each. Bit-identical to not sharing.
+        loss_divisor: what the loss is divided by before `backward` (`k` for accumulation over `k` micro-batches).
         stats_dtype: "fp32" forms the grams of `A` and `D` from fp32 inputs; "bf16" rounds the inputs
             (activations, output gradients) to bf16 and still accumulates and returns the gram in fp32, so
             it stays a PSD gram (see `CovarianceAccumulator.observe`).
@@ -125,6 +126,7 @@ class NaturalPion(torch.optim.Optimizer):
         ns_guard: float = 1.8,
         share_inputs: bool = False,
         stats_dtype: str = "fp32",
+        loss_divisor: float = 1.0,
     ) -> None:
         if lr <= 0.0:
             raise ValueError(f"lr must be positive, got {lr}")
@@ -139,6 +141,8 @@ class NaturalPion(torch.optim.Optimizer):
             raise ValueError(f"retraction must be cayley, ns, ns_delta or trunc, got {retraction!r}")
         if stats_dtype not in ("fp32", "bf16"):
             raise ValueError(f"stats_dtype must be fp32 or bf16, got {stats_dtype!r}")
+        if loss_divisor <= 0.0:
+            raise ValueError(f"loss_divisor must be positive, got {loss_divisor}")
         if stats_window is not None and not 1 <= stats_window <= t_fac:
             raise ValueError(f"stats_window must lie in [1, t_fac], got {stats_window}")
         params = list(params)
@@ -151,6 +155,7 @@ class NaturalPion(torch.optim.Optimizer):
             if k < 1 or p.shape[0] % k:
                 raise ValueError(f"row_blocks {k} does not divide {p.shape[0]} rows")
         self.share_inputs = share_inputs
+        self.loss_divisor = float(loss_divisor)
         self._input_dtype = torch.bfloat16 if stats_dtype == "bf16" else None
         self._last_input = None                    # (input tensor, its accumulator) for share_inputs
         super().__init__(params, dict(
@@ -201,14 +206,14 @@ class NaturalPion(torch.optim.Optimizer):
             self._last_input = (x, acc)
 
     def observe_backward(self, param: torch.Tensor, delta: torch.Tensor) -> None:
-        """Gradient at the layer's output (backward hook). Scaled by the token count squared: the loss is a
-        mean, so autograd's `delta` carries `1/N`, and the Fisher of a mean loss is the mean of per-token
+        """Gradient at the layer's output (backward hook). Scaled by `(N * loss_divisor)**2`, which undoes the
+        `1 / (N * loss_divisor)` autograd puts on `delta` for a mean over `N` tokens: `D` is the mean of per-token
         outer products."""
         if not self._collecting(param, "d"):
             return
         flat = delta.detach().reshape(-1, delta.shape[-1])
         self._stat(param, "cov_backward", self._group_of(param)["beta_d"]).observe(
-            flat, scale=float(flat.shape[0]) ** 2)
+            flat, scale=(float(flat.shape[0]) * self.loss_divisor) ** 2)
 
     def _ready(self, param: torch.Tensor) -> bool:
         state = self.state[param]

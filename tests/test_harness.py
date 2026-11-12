@@ -136,6 +136,18 @@ def test_optimizer_wiring(optimizer, expected):
         recorder.remove()
 
 
+@pytest.mark.parametrize("version,divisor", [(3, 4), (2, 1), (1, 1)])
+def test_d_undoes_accumulation_from_version_3(version, divisor):
+    """From defaults_version 3 the optimizer undoes the loss's division over micro-batches; the paper's runs
+    (versions 1 and 2) are rebuilt as they ran."""
+    model = Transformer(SMALL)
+    cfg = RunConfig(optimizer="natural-pion-fast", model=SMALL, batch_sequences=64, micro_batch=16,
+                    defaults_version=version)
+    rot, _, recorder = build_optimizers(model, cfg)
+    assert rot.loss_divisor == divisor
+    recorder.remove()
+
+
 def test_pion_is_wired_as_published():
     """The baseline is Pion as published: RMS scaling, Lie momentum, truncated exp."""
     model = Transformer(SMALL)
